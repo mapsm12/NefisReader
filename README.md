@@ -8,25 +8,36 @@ Delft3D. El flujo probado es Delft3D 4-WAVE en Linux x86-64.
 
 ## 1. Instalación
 
-Se necesita Python 3.9 o posterior, NumPy, netCDF4 y una **biblioteca NEFIS
-compatible con el Python y el sistema operativo**. Este repositorio no
-incluye ni instala binarios Delft3D. Si no tienes la biblioteca, consulta
-la [instalación oficial de Delft3D 4](https://oss.deltares.nl/web/delft3d/get-started)
-y las [instrucciones de compilación de Deltares](https://github.com/Deltares/Delft3D/blob/main/doc/development.md)
-para obtener los binarios correspondientes.
+En **Linux x86-64 no necesitas instalar Delft3D**: el repositorio incluye
+la [biblioteca NEFIS y su código fuente](native/README.md). Usa Python
+3.9 o posterior en un entorno propio. El instalador copia NEFIS a ese
+entorno, comprueba que se puede cargar e instala el lector y sus
+dependencias mediante pip. No requiere `sudo`.
 
 ```bash
 git clone https://github.com/mapsm12/NefisReader.git
 cd NefisReader
-conda env create -f environment.yml
-conda activate nefisreader
-python -m pip install .
-d3dnefis --help
+python3 -m venv .venv
+source .venv/bin/activate
+bash scripts/install.sh
+
+# Prueba sin archivos propios: genera una pareja sintética y conviértela.
+python examples/crear_demo.py demo-nefis
+d3dnefis demo-nefis/demo.dat --output demo-nefis/demo.nc
+python examples/leer_nefis.py demo-nefis/demo.dat
 ```
 
-Alternativa, con Python y pip: `python -m venv .venv`,
-`source .venv/bin/activate` y `python -m pip install '.[analysis]'`.
-No hace falta instalar el extra de análisis si solo quieres convertir.
+Alternativa con Conda: `conda env create -f environment.yml`,
+`conda activate nefisreader` y `bash scripts/install.sh`.
+Para instalar las herramientas de gráficos en un entorno virtual:
+`python -m pip install '.[analysis]'`.
+
+Si el binario incluido no carga, el instalador intenta compilar la
+biblioteca desde las fuentes incluidas; para ello necesita compiladores
+C y C++, y las cabeceras de desarrollo del sistema. Puedes forzar la
+compilación con `NEFIS_BUILD_FROM_SOURCE=1 bash scripts/install.sh`
+en un entorno nuevo. La instalación aislada con pip solamente
+(`python -m pip install .`) no instala la biblioteca nativa.
 
 En Linux, localiza la biblioteca en tu propia instalación:
 
@@ -37,7 +48,8 @@ ldd "$NEFIS_LIB"  # Si aparecen «not found», carga el entorno de tu instalaci�
 ```
 
 Se busca en este orden: `--nefis-lib`, `NEFIS_LIB`, y rutas comunes bajo
-`DELFT3D_HOME` (`lib`, `lib64`, `lib/delft3d`, `bin`). Usa
+`DELFT3D_HOME` (`lib`, `lib64`, `lib/delft3d`, `bin`), y finalmente
+la biblioteca instalada por el script en el entorno Python. Usa
 `--nefis-lib /ruta/...` para escoger una biblioteca sin exportar variables.
 No apuntes a un ejecutable ni mezcles bibliotecas de compilaciones distintas.
 No se afirma compatibilidad con bibliotecas Windows/macOS.
@@ -103,8 +115,8 @@ o tablas de SWAN directo no son entradas de este conversor.
 Las pruebas unitarias no necesitan bibliotecas o datos Delft3D. Para
 probar tu instalación de extremo a extremo usa una pareja **de tu
 propiedad**, primero con `--inventory` y luego hacia un destino nuevo;
-verifica los valores y las formas. Los datos y binarios usados en la
-comprobación local no se distribuyen en el repositorio.
+verifica los valores y las formas. Los datos científicos de la tesis y el
+binario institucional no se distribuyen en el repositorio.
 
-La licencia de tu biblioteca y la de tus datos se gestionan por separado.
-Este repositorio no redistribuye código ni binarios de Deltares.
+La licencia de la [biblioteca de Deltares](native/README.md) y la de tus
+datos se gestionan por separado.

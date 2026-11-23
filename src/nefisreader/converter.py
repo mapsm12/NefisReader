@@ -21,7 +21,7 @@ from typing import Iterable
 import numpy as np
 
 
-END_GROUPS = {-6028, -6027}
+END_DATA_GROUPS = {-6022, -6021}
 END_CELLS = {-6025, -6026}
 
 
@@ -119,12 +119,14 @@ class NefisFile:
             candidates.extend(Path(prefix) / directory / name
                               for directory in ("lib", "lib64", "lib/delft3d", "bin")
                               for name in ("nefis.so", "libnefis.so"))
+        candidates.append(Path(sys.prefix) / "lib" / "nefisreader" / "libnefis.so")
         for candidate in candidates:
             candidate = candidate.expanduser().resolve()
             if candidate.is_file():
                 return candidate
         shown = ", ".join(str(x) for x in candidates if x)
-        raise NefisError("No se encontró libnefis.so. Use --nefis-lib o NEFIS_LIB. " + shown)
+        raise NefisError("No se encontró libnefis.so. Ejecute bash scripts/install.sh "
+                         "desde el repositorio o use --nefis-lib / NEFIS_LIB. " + shown)
 
     def _error_text(self) -> str:
         buf = ct.create_string_buffer(1025)
@@ -143,10 +145,13 @@ class NefisFile:
     def open(self) -> "NefisFile":
         if not self.dat_file.is_file() or not self.def_file.is_file():
             raise NefisError(f"Falta la pareja NEFIS: {self.dat_file} / {self.def_file}")
-        endian, access = ct.c_char(b"N"), ct.c_char(b"r")
-        rc = self.lib.Crenef(
-            ct.byref(self.fd), str(self.dat_file).encode(), str(self.def_file).encode(),
-            ct.byref(endian), access,
+        create = self.lib.Crenef
+        create.argtypes = [ct.POINTER(ct.c_int), ct.c_char_p, ct.c_char_p,
+                           ct.c_char, ct.c_char]
+        create.restype = ct.c_int
+        rc = create(
+            ct.byref(self.fd), os.fsencode(self.dat_file), os.fsencode(self.def_file),
+            b"N", b"r",
         )
         self._check(rc, "Crenef")
         return self
@@ -168,16 +173,19 @@ class NefisFile:
             return self._groups
         groups: list[Group] = []
         while True:
-            group_name, cell_name = ct.create_string_buffer(b" " * 16), ct.create_string_buffer(b" " * 16)
-            ndim = ct.c_int(5)
-            dims, order = np.ones(10, dtype="i4"), np.ones(10, dtype="i4")
-            function = self.lib.Inqfgr if not groups else self.lib.Inqngr
-            rc = function(ct.byref(self.fd), ct.byref(group_name), ct.byref(cell_name),
-                          ct.byref(ndim), dims.ctypes, order.ctypes)
-            if rc in END_GROUPS:
+            data_name, definition = ct.create_string_buffer(17), ct.create_string_buffer(17)
+            function = self.lib.Inqfst if not groups else self.lib.Inqnxt
+            rc = function(ct.byref(self.fd), data_name, definition)
+            if rc in END_DATA_GROUPS:
                 break
-            self._check(rc, "Inqfgr/Inqngr")
-            groups.append(Group(_text(group_name.value), _text(cell_name.value),
+            self._check(rc, "Inqfst/Inqnxt")
+            cell_name = ct.create_string_buffer(17)
+            ndim = ct.c_int(5)
+            dims, order = np.ones(5, dtype="i4"), np.ones(5, dtype="i4")
+            rc = self.lib.Inqgrp(ct.byref(self.fd), definition, cell_name,
+                                 ct.byref(ndim), dims.ctypes, order.ctypes)
+            self._check(rc, f"Inqgrp({_text(definition.value)})")
+            groups.append(Group(_text(data_name.value), _text(cell_name.value),
                                 tuple(int(x) for x in dims[:ndim.value]),
                                 tuple(int(x) for x in order[:ndim.value])))
         self._groups = groups
