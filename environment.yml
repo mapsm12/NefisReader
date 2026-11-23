@@ -1,0 +1,11 @@
+name: nefisreader
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - numpy
+  - netcdf4
+  - xarray
+  - matplotlib
+  - pytest
+  - pip

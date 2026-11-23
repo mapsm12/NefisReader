@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+build/
+dist/
+*.dat
+*.def
+*.nc
+*.so*
+*.partial
+NETCDF_EXPORT/
