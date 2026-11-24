@@ -109,6 +109,23 @@ hay que inspeccionar sus propios grupos y geometría; no se aplica el
 ejemplo de WAVE automáticamente. Los archivos ya NetCDF de Delft3D FM
 o tablas de SWAN directo no son entradas de este conversor.
 
+## Ejemplos 2D, 3D y MCP
+
+El repositorio incluye [dos parejas NEFIS de ejemplo](examples/data/README.md)
+y un [servidor MCP local](MCP.md) para inventariar y leer recortes con Codex
+u otro cliente. Para instalarlo junto al lector: `bash scripts/install.sh --extra mcp`.
+
+```bash
+d3dnefis examples/data
+python examples/leer_mallas.py \
+  examples/data/NETCDF_EXPORT/wavm-demo-2d.nc \
+  examples/data/NETCDF_EXPORT/trim-demo-3d.nc --record 1 --layer 2
+```
+
+WAVE muestra un plano de altura significativa; FLOW, una capa, un
+corte vertical y un perfil de `U1/V1`. Los datos incluidos son
+sintéticos. El orden de los ejes mostrado corresponde a estas parejas.
+
 ## Pruebas
 
 `python -m pip install '.[test]'` y `python -m pytest -q`.

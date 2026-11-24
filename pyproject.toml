@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "NefisReader"
-version = "0.2.0"
+version = "0.3.0"
 description = "Inspect Delft3D 4 NEFIS files and export raw values to NetCDF-4"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -13,9 +13,11 @@ dependencies = ["numpy>=1.23", "netCDF4>=1.6"]
 [project.optional-dependencies]
 analysis = ["xarray", "matplotlib"]
 test = ["pytest"]
+mcp = ["mcp>=1.26,<2; python_version >= '3.10'"]
 
 [project.scripts]
 d3dnefis = "nefisreader.converter:main"
+nefisreader-mcp = "nefisreader.mcp_server:main"
 
 [project.urls]
 Repository = "https://github.com/mapsm12/NefisReader"
