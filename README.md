@@ -130,6 +130,10 @@ WAVE muestra un plano de altura significativa; FLOW, una capa, un
 corte vertical y un perfil de `U1/V1`. Los datos incluidos son
 sintéticos. El orden de los ejes mostrado corresponde a estas parejas.
 
+Para generar [mapas de batimetría con vectores e isóbatas](examples/MAPAS_OLEAJE.md),
+hay además una bahía sintética de mayor resolución y un script que
+grafica sus campos tras convertirlos a NetCDF.
+
 ## Pruebas
 
 `python -m pip install '.[test]'` y `python -m pytest -q`.

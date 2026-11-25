@@ -56,6 +56,11 @@ incluye capas. El orden en archivos reales debe comprobarse con los
 metadatos del modelo. No se infieren coordenadas CF, máscaras, datum,
 tiempos físicos ni geometría escalonada.
 
+El [ejemplo de mapas de oleaje](examples/MAPAS_OLEAJE.md) documenta
+cómo generar la bahía sintética, exportarla con el lector y graficar
+batimetría, isóbatas, altura significativa y transporte vectorial.
+Las figuras públicas se guardan en `docs/figures/`.
+
 API Python mínima, usando las mismas parejas:
 
 ```python

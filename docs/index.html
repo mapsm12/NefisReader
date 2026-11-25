@@ -77,6 +77,32 @@
         </div>
       </div>
       <p class="fine">El explorador visualiza cortes de ejemplo ya calculados. El paquete instalado lee y convierte tus propias parejas <code>.dat/.def</code>. La página no recibe archivos.</p>
+      <p><a class="textlink" href="#mapas">Ver mapas generados a partir de un NetCDF exportado</a></p>
+    </section>
+    <section id="mapas" class="shell section map-section">
+      <div class="section-head"><p class="eyebrow">EJEMPLOS DE POSPROCESO</p><h2>Del NetCDF al mapa.</h2>
+        <p>NefisReader exporta los campos. Un script de Python los combina para dibujar mapas de oleaje. Ambos ejemplos usan la misma bahía sintética: no son simulaciones ni datos del Callao.</p></div>
+      <div class="map-gallery">
+        <figure>
+          <a href="figures/batimetria_vectores.png" aria-label="Abrir mapa de batimetría y vectores a tamaño completo">
+            <img src="figures/batimetria_vectores.png" width="1200" height="944" loading="lazy" decoding="async" alt="Mapa sintético de profundidad: el azul se oscurece hacia aguas profundas y las flechas doradas muestran el transporte de energía alrededor de una isla.">
+          </a>
+          <figcaption><h3>Batimetría y flujo de energía</h3>
+            <p>Fondo: <code>DEPTH</code> en metros. Flechas: <code>TRANSP_X</code> y <code>TRANSP_Y</code> en kW/m. Solo se dibujan sobre agua.</p>
+            <a href="figures/batimetria_vectores.png" download>Descargar PNG</a>
+          </figcaption>
+        </figure>
+        <figure>
+          <a href="figures/altura_isobatas.png" aria-label="Abrir mapa de altura significativa e isóbatas a tamaño completo">
+            <img src="figures/altura_isobatas.png" width="1200" height="944" loading="lazy" decoding="async" alt="Mapa sintético de altura significativa con isóbatas de 10, 20 y 40 metros y una franja de menor altura detrás de la isla.">
+          </a>
+          <figcaption><h3>Altura significativa e isóbatas</h3>
+            <p>Colores: <code>HSIGN</code> en metros. Líneas: contornos de igual profundidad. El gris identifica tierra en el ejemplo sintético.</p>
+            <a href="figures/altura_isobatas.png" download>Descargar PNG</a>
+          </figcaption>
+        </figure>
+      </div>
+      <p class="map-source"><a class="textlink" href="https://github.com/mapsm12/NefisReader/blob/main/examples/MAPAS_OLEAJE.md">Reproducir ambos mapas con Python</a></p>
     </section>
     <section id="instalar" class="setup">
       <div class="shell section">

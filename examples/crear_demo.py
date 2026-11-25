@@ -86,10 +86,50 @@ def create_grids(directory: Path) -> list[Path]:
     return [wave, flow]
 
 
+def create_wave_map(directory: Path) -> Path:
+    """Create a fictional bay with the variable layout of a WAVE map."""
+    x, y = np.meshgrid(np.linspace(0, 16, 113), np.linspace(0, 12, 85))
+    coastline = 12.1 + 2.65 * np.exp(-((y - 6.2) / 3.35) ** 2)
+    coastline -= 1.1 * np.exp(-((y - 1.7) / 1.45) ** 2)
+    angle = np.deg2rad(24)
+    ix, iy = x - 8.45, y - 6.8
+    along = ix * np.sin(angle) + iy * np.cos(angle)
+    across = ix * np.cos(angle) - iy * np.sin(angle)
+    island = np.sqrt((along / 2.15) ** 2 + (across / 0.93) ** 2)
+    shelf = 4.3 * (coastline - x) + 1.5 * np.sin(1.1 * y) * np.tanh((coastline - x) / 4)
+    depth = np.clip(np.minimum(shelf, 22 * (island - 1)), 0, 62)
+    wet = depth > 0
+
+    # Illustrative fields only: no wave solver is used.
+    wake = np.exp(-((y - 6.9 - 0.24 * (x - 8.6)) / 1.45) ** 2)
+    wake *= 0.5 * (1 + np.tanh((x - 9.05) / 0.75))
+    height = (2.55 + 0.42 * np.cos(0.42 * (y - 2))) * (0.40 + 0.60 * np.tanh(depth / 17))
+    height *= 1 - 0.59 * wake
+    bearing_xy = 0.19 + 0.38 * np.tanh((y - 6.65) / 0.9) * np.exp(-((x - 7.9) / 2.75) ** 2)
+    energy = 3800 * height**2
+    raw = {
+        b"XP": (1000 * x, b"x coordinate", b"m", b"Synthetic X"),
+        b"YP": (1000 * y, b"y coordinate", b"m", b"Synthetic Y"),
+        b"DEPTH": (depth, b"depth", b"m", b"Positive-down synthetic depth"),
+        b"HSIGN": (np.where(wet, height, 0), b"height", b"m", b"Synthetic significant wave height"),
+        b"TRANSP_X": (np.where(wet, energy * np.cos(bearing_xy), 0), b"energy transport", b"W/m", b"Synthetic energy transport X"),
+        b"TRANSP_Y": (np.where(wet, energy * np.sin(bearing_xy), 0), b"energy transport", b"W/m", b"Synthetic energy transport Y"),
+    }
+    return _write_pair(directory, "wavm-bahia-sintetica", {
+        name: (np.asarray(field[None, ...], dtype="f4"), quantity, unit, description)
+        for name, (field, quantity, unit, description) in raw.items()
+    })
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("directory", type=Path)
-    parser.add_argument("--grids", action="store_true", help="Genera ejemplos 2D y 3D.")
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--grids", action="store_true", help="Genera ejemplos 2D y 3D.")
+    mode.add_argument("--map", action="store_true", help="Genera el caso sintético de bahía para hacer mapas.")
     args = parser.parse_args()
-    for path in create_grids(args.directory) if args.grids else [create_demo(args.directory)]:
+    paths = create_grids(args.directory) if args.grids else [
+        create_wave_map(args.directory) if args.map else create_demo(args.directory)
+    ]
+    for path in paths:
         print(path)
