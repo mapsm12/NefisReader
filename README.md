@@ -1,13 +1,14 @@
-# NefisReader — Delft3D 4 NEFIS a NetCDF con Python
+# NefisReader v0.1 — Delft3D 4 NEFIS a NetCDF con Python
 
-Versión instalable del conversor `d3dnefis` de Miguel Andrade Pereira
+Paquete instalable de software libre del conversor `d3dnefis` de Miguel Andrade Pereira
 ([@mapsm12](https://github.com/mapsm12)). Lee parejas NEFIS `.dat` + `.def`
 mediante la API C de la biblioteca NEFIS con Python y `ctypes`, y exporta
 los campos numéricos a NetCDF-4. No requiere MATLAB ni volver a ejecutar
 Delft3D. El flujo probado es Delft3D 4-WAVE en Linux x86-64.
 
-**[Página de NefisReader y demo interactiva](https://mapsm12.github.io/NefisReader/)** ·
-[Código de la web](docs/) · [Créditos y avisos de licencia](AVISOS.md)
+**[Página del paquete y explorador de ejemplos](https://mapsm12.github.io/NefisReader/)** ·
+[Guía de uso y mantenimiento](MANTENIMIENTO.md) ·
+[Licencia MIT](LICENSE) · [Avisos de terceros](AVISOS.md)
 
 ## 1. Instalación
 
@@ -140,3 +141,10 @@ binario institucional no se distribuyen en el repositorio.
 
 La licencia de la [biblioteca de Deltares](native/README.md) y la de tus
 datos se gestionan por separado.
+
+## Apoyar el proyecto
+
+Se aceptan donaciones voluntarias. Si te sirve NefisReader y quieres
+apoyar su mantenimiento, contacta a [Miguel Andrade Pereira (@mapsm12)](https://github.com/mapsm12)
+o abre una [consulta de contacto en GitHub](https://github.com/mapsm12/NefisReader/issues/new?title=Consulta%20sobre%20donaciones%20a%20NefisReader).
+No incluyas datos de pago ni información personal en una incidencia pública.
