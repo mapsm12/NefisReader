@@ -2,7 +2,10 @@
 
 [English site](https://mapsm12.github.io/NefisReader/) ·
 [Español](README.md) · [Bahasa Indonesia](https://mapsm12.github.io/NefisReader/docs/id.html) ·
-[简体中文](https://mapsm12.github.io/NefisReader/docs/zh.html)
+[简体中文](https://mapsm12.github.io/NefisReader/docs/zh.html) ·
+[日本語](https://mapsm12.github.io/NefisReader/docs/ja.html) ·
+[Português (Brasil)](https://mapsm12.github.io/NefisReader/docs/pt.html) ·
+[Nederlands](https://mapsm12.github.io/NefisReader/docs/nl.html)
 
 NefisReader is an open-source Python package for reading Delft3D 4
 NEFIS `.dat/.def` pairs and exporting numerical fields to NetCDF-4.

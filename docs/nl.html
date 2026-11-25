@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lees NEFIS-uitvoer van Delft3D 4 en zet die met Python om naar NetCDF. Probeer de voorbeelden voor WAVE 2D en FLOW 3D.">
+  <meta name="theme-color" content="#081e2c">
+  <title>NefisReader v0.1 — Python-pakket voor Delft3D 4</title>
+  <link rel="alternate" hreflang="en" href="index.html">
+  <link rel="alternate" hreflang="es" href="es.html">
+  <link rel="alternate" hreflang="id" href="id.html">
+  <link rel="alternate" hreflang="zh-Hans" href="zh.html">
+  <link rel="alternate" hreflang="ja" href="ja.html">
+  <link rel="alternate" hreflang="pt-BR" href="pt.html">
+  <link rel="alternate" hreflang="nl" href="nl.html">
+  <link rel="alternate" hreflang="x-default" href="index.html">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="i18n.js"></script>
+  <script defer src="demo-data.js"></script>
+  <script defer src="demo.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Naar de inhoud</a>
+  <header class="top">
+    <div class="shell nav">
+      <a class="brand" href="#" aria-label="Startpagina van NefisReader"><span aria-hidden="true" class="mark">≋</span>NefisReader</a>
+      <nav aria-label="Hoofdnavigatie">
+        <a href="#demo">Voorbeelden</a><a href="#instalar">Installeren</a>
+        <a href="https://github.com/mapsm12/NefisReader">GitHub</a>
+      </nav>
+      <nav class="languages" aria-label="Taal">
+        <a href="index.html" data-lang="en" lang="en" hreflang="en">English</a>
+        <a href="es.html" data-lang="es" lang="es" hreflang="es">Español</a>
+        <a href="id.html" data-lang="id" lang="id" hreflang="id">Bahasa Indonesia</a>
+        <a href="zh.html" data-lang="zh-Hans" lang="zh-Hans" hreflang="zh-Hans">简体中文</a>
+        <a href="ja.html" data-lang="ja" lang="ja" hreflang="ja">日本語</a>
+        <a href="pt.html" data-lang="pt-BR" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a>
+        <a href="nl.html" data-lang="nl" lang="nl" hreflang="nl" aria-current="page">Nederlands</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <section class="hero">
+      <div class="shell intro">
+        <div>
+          <p class="eyebrow">OPEN-SOURCE PYTHON-PAKKET · V0.1</p>
+          <h1>NefisReader</h1>
+          <p class="lead">Lees NEFIS-uitvoer van Delft3D 4 en zet die om naar <strong>NetCDF</strong>. Inclusief het commando <code>d3dnefis</code>, een Python-API en een optionele MCP-server.</p>
+          <div class="actions"><a class="button primary" href="#instalar">Installeren op Linux</a><a class="button outline" href="#demo">Bekijk 2D- en 3D-voorbeelden</a></div>
+        </div>
+        <div class="schematic" aria-label="Werkstroom van NEFIS naar Python en NetCDF">
+          <svg viewBox="0 0 420 238" role="img" aria-labelledby="sketch">
+            <title id="sketch">Schematische weergave van een veld op een rooster met drie lagen</title>
+            <defs>
+              <pattern id="grid" width="26" height="18" patternUnits="userSpaceOnUse"><path d="M 26 0 L 0 0 0 18" stroke="#7ee0d4" stroke-opacity=".35" fill="none"/></pattern>
+              <linearGradient id="plane"><stop stop-color="#26b7a7" stop-opacity=".7"/><stop offset="1" stop-color="#136785" stop-opacity=".15"/></linearGradient>
+            </defs>
+            <g transform="translate(48 53) skewX(-28)">
+              <g fill="url(#grid)" stroke="#5097a1" stroke-width="1">
+                <rect x="85" y="76" width="260" height="96"/>
+                <rect x="54" y="38" width="260" height="96"/>
+                <rect x="24" y="0" width="260" height="96"/>
+              </g>
+              <rect x="24" y="0" width="260" height="96" fill="url(#plane)" opacity=".55"/>
+              <g fill="none" stroke="#b6fff1" stroke-width="1.5" opacity=".8">
+                <path d="M31 65 Q106 66 147 36 T272 24"/>
+                <path d="M31 77 Q112 78 155 48 T277 35"/>
+                <path d="M31 87 Q112 89 164 60 T280 45"/>
+              </g>
+            </g>
+          </svg>
+          <div class="diagram-labels"><span>.dat + .def</span><span>Python</span><span>.nc</span></div>
+        </div>
+      </div>
+    </section>
+    <section id="demo" class="shell section">
+      <div class="section-head"><p class="eyebrow">INTERACTIEVE VOORBEELDEN</p><h2>Verken WAVE 2D en FLOW 3D.</h2>
+        <p>Kies een golfveld of een snelheidslaag. De waarden zijn met NefisReader geëxporteerd uit de synthetische voorbeelden in de repository.</p></div>
+      <div class="workbench">
+        <div class="controls">
+          <label>Voorbeeld<select id="case"><option value="wave">WAVE · 2D-golven</option><option value="flow">FLOW · 3D-stroomsnelheid</option></select></label>
+          <label>Variabele<select id="variable"><option>HSIGN</option></select></label>
+          <label>Record<select id="record"><option value="0">0</option></select></label>
+          <label id="layer-control" hidden>Laag<select id="layer"><option value="0">0</option></select></label>
+          <a class="textlink" href="https://github.com/mapsm12/NefisReader/tree/main/examples/data">.dat- en .def-bestanden</a>
+        </div>
+        <div class="result">
+          <div class="result-head"><div><h3 id="variable-title">Significante golfhoogte</h3><p id="shape">Voorbeeld wordt geladen…</p></div><button id="csv" class="small" type="button" disabled>CSV downloaden</button></div>
+          <div class="matrix-wrap">
+            <table class="matrix" id="matrix" aria-label="Voorbeeldwaarden voor één vlak"></table>
+          </div>
+          <div class="scale"><span id="min"></span><span class="ramp" aria-hidden="true"></span><span id="max"></span></div>
+          <p id="status" class="muted" role="status">Synthetische gegevens, geen waarnemingen of scriptieresultaten.</p>
+          <noscript><p>Schakel JavaScript in of download de bestandsparen om ze in Python te gebruiken.</p></noscript>
+        </div>
+      </div>
+      <p class="fine">De verkenner toont vooraf berekende doorsneden. Met het geïnstalleerde pakket kun je eigen <code>.dat/.def</code>-paren lezen en converteren. Deze pagina accepteert geen uploads.</p>
+      <p><a class="textlink" href="#mapas">Bekijk kaarten op basis van een geëxporteerd NetCDF-bestand</a></p>
+    </section>
+    <section id="mapas" class="shell section map-section">
+      <div class="section-head"><p class="eyebrow">VOORBEELDEN VAN NABEWERKING</p><h2>Van NetCDF naar kaarten.</h2>
+        <p>NefisReader exporteert de velden. Een Python-script combineert ze tot kaarten. Beide voorbeelden gebruiken dezelfde synthetische baai, geen simulatie of gegevens uit Callao. De labels in de figuren zijn Engels.</p></div>
+      <div class="map-gallery">
+        <figure>
+          <a href="figures/bathymetry_vectors.png" aria-label="Open de kaart met bathymetrie en vectoren op volledige grootte">
+            <img src="figures/bathymetry_vectors.png" width="1200" height="944" loading="lazy" decoding="async" alt="Synthetische dieptekaart. Donkerblauw duidt op dieper water; gouden pijlen tonen het energietransport rond een eiland.">
+          </a>
+          <figcaption><h3>Bathymetrie en energiestroom</h3>
+            <p>Achtergrond: <code>DEPTH</code> in meter. Pijlen: <code>TRANSP_X</code> en <code>TRANSP_Y</code> in kW/m, alleen boven water.</p>
+            <a href="figures/bathymetry_vectors.png" download>PNG downloaden</a>
+          </figcaption>
+        </figure>
+        <figure>
+          <a href="figures/height_depth_contours.png" aria-label="Open de kaart met golfhoogte en dieptecontouren op volledige grootte">
+            <img src="figures/height_depth_contours.png" width="1200" height="944" loading="lazy" decoding="async" alt="Synthetische kaart met significante golfhoogte, dieptecontouren op 10, 20 en 40 meter en lagere golven achter het eiland.">
+          </a>
+          <figcaption><h3>Significante golfhoogte en dieptecontouren</h3>
+            <p>Kleuren: <code>HSIGN</code> in meter. Lijnen: dieptecontouren. Grijs markeert land in het synthetische voorbeeld.</p>
+            <a href="figures/height_depth_contours.png" download>PNG downloaden</a>
+          </figcaption>
+        </figure>
+      </div>
+      <p class="map-source"><a class="textlink" href="https://github.com/mapsm12/NefisReader/blob/main/README.en.md#reproduce-the-maps">Reproduceer beide kaarten met Python</a></p>
+    </section>
+    <section id="instalar" class="setup">
+      <div class="shell section">
+        <div class="section-head"><p class="eyebrow">INSTALLATIE</p><h2>Installeer het pakket en lees je modeluitvoer.</h2>
+          <p>Linux x86-64, Python 3.9 of hoger en internettoegang om de afhankelijkheden te installeren. <a href="https://github.com/mapsm12/NefisReader/archive/refs/heads/main.tar.gz">Download het pakket</a> en voer deze commando’s uit vanuit je downloadmap. Je hoeft Delft3D niet te installeren.</p></div>
+        <div class="setup-grid">
+          <div class="terminal"><div class="terminal-top"><span>Terminal · Linux</span><button data-copy="install-command" class="small" type="button">Kopiëren</button></div>
+<pre id="install-command"><code>tar -xzf NefisReader-main.tar.gz
+cd NefisReader-main
+python3 -m venv .venv
+source .venv/bin/activate
+bash scripts/install.sh
+d3dnefis examples/data
+python examples/leer_mallas.py \
+  examples/data/NETCDF_EXPORT/wavm-demo-2d.nc \
+  examples/data/NETCDF_EXPORT/trim-demo-3d.nc</code></pre>
+          </div>
+          <div class="side">
+            <h3>Heb je al een uitvoerbestand?</h3><p>Geef een <code>.dat</code>-bestand of de uitvoermap aan <code>d3dnefis</code>. Gebruik <code>--inventory</code> om variabelen te bekijken zonder ze te converteren.</p>
+            <h3>Verbind je agent via MCP</h3><p>De lokale server toont variabelen en leest deelgegevens uit NEFIS- of NetCDF-bestanden in de toegestane map. Vereist Python 3.10 of hoger.</p>
+            <a class="textlink" href="https://github.com/mapsm12/NefisReader/blob/main/README.en.md#mcp">MCP-handleiding voor Codex en andere clients</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="creditos" class="shell section credits">
+      <div><p class="eyebrow">BRONNEN EN TOEPASSING</p><h2>Open-sourcesoftware.</h2></div>
+      <div><p><strong>NefisReader</strong> is een onafhankelijk project. Het is geen officieel product van Deltares en wordt niet door Deltares onderschreven.</p>
+        <p>Deltares ontwikkelt de NEFIS-bibliotheek. De <a href="https://github.com/mapsm12/NefisReader/blob/main/native/README.md">broncode, kennisgevingen en bouwinstructies</a> worden apart in de repository verspreid. De voorbeelden zijn synthetisch en bevatten geen scriptiegegevens.</p>
+        <p>De eigen code valt onder de <a href="https://github.com/mapsm12/NefisReader/blob/main/LICENSE">MIT-licentie</a>. Voor de NEFIS-bibliotheek van Deltares gelden de <a href="https://github.com/mapsm12/NefisReader/blob/main/AVISOS.md">eigen kennisgevingen en licentie</a>.</p></div>
+    </section>
+    <section id="apoyar" class="setup">
+      <div class="shell section credits">
+        <div><h2>Was NefisReader nuttig?</h2></div>
+        <div><p><a class="button star" href="https://github.com/mapsm12/NefisReader"><span aria-hidden="true">★</span> Geef een ster op GitHub</a></p>
+          <p>Log in bij GitHub en klik op <strong>Star</strong> om de repository te bewaren en het project te steunen.</p>
+          <p>Wil je het project steunen met een vrijwillige donatie? <a class="textlink" href="https://github.com/mapsm12/NefisReader/issues/new?title=NefisReader%20donation%20inquiry">Neem contact op!</a></p>
+          <p class="fine">Deze link opent een openbare GitHub-issue. Deel daar geen betaalgegevens.</p></div>
+      </div>
+    </section>
+  </main>
+  <footer class="top"><div class="shell nav"><span>NefisReader · v0.1</span><a href="https://github.com/mapsm12/NefisReader/issues">Meld een probleem</a></div></footer>
+</body>
+</html>

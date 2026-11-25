@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Delft3D 4 の NEFIS 出力を Python で読み込み、NetCDF に変換します。WAVE 2D と FLOW 3D の例をお試しください。">
+  <meta name="theme-color" content="#081e2c">
+  <title>NefisReader v0.1 — Delft3D 4 用 Python パッケージ</title>
+  <link rel="alternate" hreflang="en" href="index.html">
+  <link rel="alternate" hreflang="es" href="es.html">
+  <link rel="alternate" hreflang="id" href="id.html">
+  <link rel="alternate" hreflang="zh-Hans" href="zh.html">
+  <link rel="alternate" hreflang="ja" href="ja.html">
+  <link rel="alternate" hreflang="pt-BR" href="pt.html">
+  <link rel="alternate" hreflang="nl" href="nl.html">
+  <link rel="alternate" hreflang="x-default" href="index.html">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="i18n.js"></script>
+  <script defer src="demo-data.js"></script>
+  <script defer src="demo.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">本文へ移動</a>
+  <header class="top">
+    <div class="shell nav">
+      <a class="brand" href="#" aria-label="NefisReader トップページ"><span aria-hidden="true" class="mark">≋</span>NefisReader</a>
+      <nav aria-label="メインナビゲーション">
+        <a href="#demo">使用例</a><a href="#instalar">インストール</a>
+        <a href="https://github.com/mapsm12/NefisReader">GitHub</a>
+      </nav>
+      <nav class="languages" aria-label="言語">
+        <a href="index.html" data-lang="en" lang="en" hreflang="en">English</a>
+        <a href="es.html" data-lang="es" lang="es" hreflang="es">Español</a>
+        <a href="id.html" data-lang="id" lang="id" hreflang="id">Bahasa Indonesia</a>
+        <a href="zh.html" data-lang="zh-Hans" lang="zh-Hans" hreflang="zh-Hans">简体中文</a>
+        <a href="ja.html" data-lang="ja" lang="ja" hreflang="ja" aria-current="page">日本語</a>
+        <a href="pt.html" data-lang="pt-BR" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a>
+        <a href="nl.html" data-lang="nl" lang="nl" hreflang="nl">Nederlands</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <section class="hero">
+      <div class="shell intro">
+        <div>
+          <p class="eyebrow">オープンソースの PYTHON パッケージ · V0.1</p>
+          <h1>NefisReader</h1>
+          <p class="lead">Delft3D 4 の NEFIS 出力を読み込み、<strong>NetCDF</strong> に変換します。<code>d3dnefis</code> コマンド、Python API、オプションの MCP サーバーを利用できます。</p>
+          <div class="actions"><a class="button primary" href="#instalar">Linux にインストール</a><a class="button outline" href="#demo">2D・3D の例を見る</a></div>
+        </div>
+        <div class="schematic" aria-label="NEFIS から Python と NetCDF への処理手順">
+          <svg viewBox="0 0 420 238" role="img" aria-labelledby="sketch">
+            <title id="sketch">3 層の格子上にある場の概念図</title>
+            <defs>
+              <pattern id="grid" width="26" height="18" patternUnits="userSpaceOnUse"><path d="M 26 0 L 0 0 0 18" stroke="#7ee0d4" stroke-opacity=".35" fill="none"/></pattern>
+              <linearGradient id="plane"><stop stop-color="#26b7a7" stop-opacity=".7"/><stop offset="1" stop-color="#136785" stop-opacity=".15"/></linearGradient>
+            </defs>
+            <g transform="translate(48 53) skewX(-28)">
+              <g fill="url(#grid)" stroke="#5097a1" stroke-width="1">
+                <rect x="85" y="76" width="260" height="96"/>
+                <rect x="54" y="38" width="260" height="96"/>
+                <rect x="24" y="0" width="260" height="96"/>
+              </g>
+              <rect x="24" y="0" width="260" height="96" fill="url(#plane)" opacity=".55"/>
+              <g fill="none" stroke="#b6fff1" stroke-width="1.5" opacity=".8">
+                <path d="M31 65 Q106 66 147 36 T272 24"/>
+                <path d="M31 77 Q112 78 155 48 T277 35"/>
+                <path d="M31 87 Q112 89 164 60 T280 45"/>
+              </g>
+            </g>
+          </svg>
+          <div class="diagram-labels"><span>.dat + .def</span><span>Python</span><span>.nc</span></div>
+        </div>
+      </div>
+    </section>
+    <section id="demo" class="shell section">
+      <div class="section-head"><p class="eyebrow">インタラクティブな使用例</p><h2>WAVE 2D と FLOW 3D を見る</h2>
+        <p>波浪場または流速の層を選択できます。表示値は、リポジトリの合成例から NefisReader で出力したものです。</p></div>
+      <div class="workbench">
+        <div class="controls">
+          <label>使用例<select id="case"><option value="wave">WAVE · 2 次元波浪</option><option value="flow">FLOW · 3 次元流速</option></select></label>
+          <label>変数<select id="variable"><option>HSIGN</option></select></label>
+          <label>レコード<select id="record"><option value="0">0</option></select></label>
+          <label id="layer-control" hidden>層<select id="layer"><option value="0">0</option></select></label>
+          <a class="textlink" href="https://github.com/mapsm12/NefisReader/tree/main/examples/data">.dat と .def ファイル</a>
+        </div>
+        <div class="result">
+          <div class="result-head"><div><h3 id="variable-title">有義波高</h3><p id="shape">例を読み込み中…</p></div><button id="csv" class="small" type="button" disabled>CSV をダウンロード</button></div>
+          <div class="matrix-wrap">
+            <table class="matrix" id="matrix" aria-label="1 つの平面のサンプル値"></table>
+          </div>
+          <div class="scale"><span id="min"></span><span class="ramp" aria-hidden="true"></span><span id="max"></span></div>
+          <p id="status" class="muted" role="status">合成データです。観測値や論文の結果ではありません。</p>
+          <noscript><p>JavaScript を有効にするか、ファイルの組をダウンロードして Python でお試しください。</p></noscript>
+        </div>
+      </div>
+      <p class="fine">ブラウザーでは事前生成した断面を表示します。パッケージをインストールすると、お手元の <code>.dat/.def</code> ファイルの組を読み込み、変換できます。このページではファイルのアップロードはできません。</p>
+      <p><a class="textlink" href="#mapas">出力した NetCDF から生成した地図を見る</a></p>
+    </section>
+    <section id="mapas" class="shell section map-section">
+      <div class="section-head"><p class="eyebrow">後処理の使用例</p><h2>NetCDF から地図へ</h2>
+        <p>NefisReader で出力した変数から Python で地図を作成できます。2 つの例は同じ合成海域を使用しており、数値シミュレーションやカヤオのデータではありません。図中の表記は英語です。</p></div>
+      <div class="map-gallery">
+        <figure>
+          <a href="figures/bathymetry_vectors.png" aria-label="水深とベクトルの地図を原寸で開く">
+            <img src="figures/bathymetry_vectors.png" width="1200" height="944" loading="lazy" decoding="async" alt="合成水深図。濃い青ほど水深が大きく、金色の矢印は島の周囲のエネルギー輸送を示します。">
+          </a>
+          <figcaption><h3>水深とエネルギーフラックス</h3>
+            <p>背景：<code>DEPTH</code>（m）。矢印：<code>TRANSP_X</code> と <code>TRANSP_Y</code>（kW/m）。矢印は水域のみに表示します。</p>
+            <a href="figures/bathymetry_vectors.png" download>PNG をダウンロード</a>
+          </figcaption>
+        </figure>
+        <figure>
+          <a href="figures/height_depth_contours.png" aria-label="有義波高と等深線の地図を原寸で開く">
+            <img src="figures/height_depth_contours.png" width="1200" height="944" loading="lazy" decoding="async" alt="10、20、40 m の等深線を重ねた合成有義波高図です。島の背後では波高が低くなっています。">
+          </a>
+          <figcaption><h3>有義波高と等深線</h3>
+            <p>色：<code>HSIGN</code>（m）。線：等深線。合成例では灰色が陸地です。</p>
+            <a href="figures/height_depth_contours.png" download>PNG をダウンロード</a>
+          </figcaption>
+        </figure>
+      </div>
+      <p class="map-source"><a class="textlink" href="https://github.com/mapsm12/NefisReader/blob/main/README.en.md#reproduce-the-maps">Python で両方の地図を再現する</a></p>
+    </section>
+    <section id="instalar" class="setup">
+      <div class="shell section">
+        <div class="section-head"><p class="eyebrow">インストール</p><h2>パッケージをインストールしてモデル出力を読む</h2>
+          <p>Linux x86-64、Python 3.9 以降、依存関係のインストール用のインターネット接続が必要です。 <a href="https://github.com/mapsm12/NefisReader/archive/refs/heads/main.tar.gz">パッケージをダウンロード</a> し、ダウンロードフォルダーで以下のコマンドを実行してください。Delft3D のインストールは不要です。</p></div>
+        <div class="setup-grid">
+          <div class="terminal"><div class="terminal-top"><span>Terminal · Linux</span><button data-copy="install-command" class="small" type="button">コピー</button></div>
+<pre id="install-command"><code>tar -xzf NefisReader-main.tar.gz
+cd NefisReader-main
+python3 -m venv .venv
+source .venv/bin/activate
+bash scripts/install.sh
+d3dnefis examples/data
+python examples/leer_mallas.py \
+  examples/data/NETCDF_EXPORT/wavm-demo-2d.nc \
+  examples/data/NETCDF_EXPORT/trim-demo-3d.nc</code></pre>
+          </div>
+          <div class="side">
+            <h3>出力ファイルをお持ちですか？</h3><p><code>d3dnefis</code> に <code>.dat</code> ファイルまたは計算結果のフォルダーを渡します。<code>--inventory</code> を指定すると、変換せずに変数を確認できます。</p>
+            <h3>MCP でエージェントを接続</h3><p>ローカルサーバーは、許可したフォルダー内の NEFIS や NetCDF ファイルから、変数一覧や部分データを読み取ります。Python 3.10 以降が必要です。</p>
+            <a class="textlink" href="https://github.com/mapsm12/NefisReader/blob/main/README.en.md#mcp">Codex などのクライアント向け MCP ガイド</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="creditos" class="shell section credits">
+      <div><p class="eyebrow">クレジットと適用範囲</p><h2>オープンソースソフトウェア</h2></div>
+      <div><p><strong>NefisReader</strong> は独立したプロジェクトです。Deltares の公式製品ではなく、同社の推奨を受けたものでもありません。</p>
+        <p>NEFIS ライブラリは Deltares が開発しています。その <a href="https://github.com/mapsm12/NefisReader/blob/main/native/README.md">ソースコード、ライセンス表示、ビルド手順</a> はリポジトリ内で別に配布しています。使用例は合成データで、論文のデータは含みません。</p>
+        <p>本プロジェクトのコードのライセンス： <a href="https://github.com/mapsm12/NefisReader/blob/main/LICENSE">MIT ライセンス</a>. Deltares の NEFIS ライブラリ： <a href="https://github.com/mapsm12/NefisReader/blob/main/AVISOS.md">固有のライセンスと表示</a>.</p></div>
+    </section>
+    <section id="apoyar" class="setup">
+      <div class="shell section credits">
+        <div><h2>NefisReader は役に立ちましたか？</h2></div>
+        <div><p><a class="button star" href="https://github.com/mapsm12/NefisReader"><span aria-hidden="true">★</span> GitHub でスターを付ける</a></p>
+          <p>GitHub にログインし、<strong>Star</strong> をクリックしてリポジトリを保存し、プロジェクトを応援してください。</p>
+          <p>寄付でプロジェクトを支援したい方は、 <a class="textlink" href="https://github.com/mapsm12/NefisReader/issues/new?title=NefisReader%20donation%20inquiry">ご連絡ください！</a></p>
+          <p class="fine">このリンクは公開の GitHub issue を開きます。支払い情報は記載しないでください。</p></div>
+      </div>
+    </section>
+  </main>
+  <footer class="top"><div class="shell nav"><span>NefisReader · v0.1</span><a href="https://github.com/mapsm12/NefisReader/issues">問題を報告</a></div></footer>
+</body>
+</html>

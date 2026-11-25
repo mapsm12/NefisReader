@@ -91,8 +91,10 @@ La salida de las herramientas puede llegar al proveedor del cliente MCP.
    metadatos Python están en `pyproject.toml`; la plantilla española
    de la web está en `docs/es.html`. Tras modificarla, sincroniza
    `scripts/localizar_web.py` y ejecuta `python3 scripts/localizar_web.py docs`
-   para regenerar inglés (idioma inicial), indonesio y chino simplificado.
-   Los textos dinámicos se mantienen en `docs/i18n.js`. El acceso
+   para regenerar inglés (idioma inicial), indonesio, chino simplificado,
+   japonés, portugués de Brasil y neerlandés. Las traducciones nuevas se
+   guardan en `scripts/web_locales_extra.txt`; los textos dinámicos se
+   mantienen en `docs/i18n.js`. El acceso
    principal sigue en el `index.html` de la raíz.
 2. GitHub Pages usa la rama `main` desde la raíz. El `index.html` de la
    raíz lleva a `/docs/`. La copia anterior de Sites quedó privada; no

@@ -1,4 +1,4 @@
-"""Render static EN, ID and zh-Hans pages from the Spanish site source."""
+"""Render localized static pages from the Spanish site source."""
 
 import argparse
 from pathlib import Path
@@ -83,6 +83,31 @@ Reportar un problema|Report an issue|Laporkan masalah|报告问题
 """.strip()
 
 LANGS = (("en", "index.html"), ("id", "id.html"), ("zh-Hans", "zh.html"))
+EXTRA_LANGS = (("ja", "ja.html"), ("pt-BR", "pt.html"), ("nl", "nl.html"))
+
+
+def extra_mappings(rows):
+    english_to_source = {row[1]: row[0] for row in rows}
+    source = Path(__file__).with_name("web_locales_extra.txt")
+    maps = {lang: {} for lang, _ in EXTRA_LANGS}
+    for line in source.read_text(encoding="utf-8").splitlines():
+        if not line or line.startswith("#"):
+            continue
+        key, *translations = line.split("|")
+        matches = [key] if key in english_to_source else [
+            fragment for fragment in english_to_source if fragment.startswith(key)
+        ]
+        if len(matches) != 1 or len(translations) != len(EXTRA_LANGS):
+            raise ValueError(f"Ambiguous or malformed translation key: {key}")
+        fragment = english_to_source[matches[0]]
+        for (lang, _), translation in zip(EXTRA_LANGS, translations):
+            if fragment in maps[lang] or not translation.strip():
+                raise ValueError(f"Duplicate or empty translation for {lang}: {key}")
+            maps[lang][fragment] = translation
+    for lang, values in maps.items():
+        if missing := set(english_to_source.values()) - values.keys():
+            raise ValueError(f"Missing {lang} translations: {sorted(missing)}")
+    return maps
 
 
 def render(directory: Path) -> None:
@@ -91,8 +116,11 @@ def render(directory: Path) -> None:
     assert all(len(row) == 4 for row in rows)
     assert all(row[0] in template for row in rows), [row[0] for row in rows if row[0] not in template]
     pattern = re.compile("|".join(re.escape(row[0]) for row in sorted(rows, key=lambda row: -len(row[0]))))
-    for column, (lang, filename) in enumerate(LANGS, start=1):
-        mapping = {row[0]: row[column] for row in rows}
+    mappings = {lang: {row[0]: row[column] for row in rows}
+                for column, (lang, _) in enumerate(LANGS, start=1)}
+    mappings.update(extra_mappings(rows))
+    for lang, filename in LANGS + EXTRA_LANGS:
+        mapping = mappings[lang]
         html = pattern.sub(lambda match: mapping[match[0]], template)
         html = html.replace('<html lang="es">', f'<html lang="{lang}">', 1).replace(' aria-current="page"', '', 1)
         html = re.sub(rf'(<a [^>]+data-lang="{lang}"[^>]+)>', r'\1 aria-current="page">', html, count=1)

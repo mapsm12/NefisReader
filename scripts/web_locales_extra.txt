@@ -1,0 +1,74 @@
+# Unique prefix of the English source fragment | Japanese | Brazilian Portuguese | Dutch
+Read Delft3D 4 NEFIS outputs and convert them to NetCDF with Python.|Delft3D 4 の NEFIS 出力を Python で読み込み、NetCDF に変換します。WAVE 2D と FLOW 3D の例をお試しください。|Leia saídas NEFIS do Delft3D 4 e converta-as para NetCDF com Python. Experimente os exemplos WAVE 2D e FLOW 3D.|Lees NEFIS-uitvoer van Delft3D 4 en zet die met Python om naar NetCDF. Probeer de voorbeelden voor WAVE 2D en FLOW 3D.
+Python package for Delft3D 4|Delft3D 4 用 Python パッケージ|Pacote Python para Delft3D 4|Python-pakket voor Delft3D 4
+Skip to content|本文へ移動|Ir para o conteúdo|Naar de inhoud
+NefisReader home|NefisReader トップページ|Página inicial do NefisReader|Startpagina van NefisReader
+aria-label="Main navigation"|aria-label="メインナビゲーション"|aria-label="Navegação principal"|aria-label="Hoofdnavigatie"
+aria-label="Language"|aria-label="言語"|aria-label="Idioma"|aria-label="Taal"
+>Examples<|>使用例<|>Exemplos<|>Voorbeelden<
+>Install<|>インストール<|>Instalar<|>Installeren<
+OPEN-SOURCE PYTHON PACKAGE|オープンソースの PYTHON パッケージ · V0.1|PACOTE PYTHON DE CÓDIGO ABERTO · V0.1|OPEN-SOURCE PYTHON-PAKKET · V0.1
+Read Delft3D 4 NEFIS outputs and convert them to <strong>|Delft3D 4 の NEFIS 出力を読み込み、<strong>NetCDF</strong> に変換します。<code>d3dnefis</code> コマンド、Python API、オプションの MCP サーバーを利用できます。|Leia saídas NEFIS do Delft3D 4 e converta-as para <strong>NetCDF</strong>. Inclui o comando <code>d3dnefis</code>, uma API Python e um servidor MCP opcional.|Lees NEFIS-uitvoer van Delft3D 4 en zet die om naar <strong>NetCDF</strong>. Inclusief het commando <code>d3dnefis</code>, een Python-API en een optionele MCP-server.
+Install on Linux|Linux にインストール|Instalar no Linux|Installeren op Linux
+Explore 2D and 3D examples|2D・3D の例を見る|Explorar exemplos 2D e 3D|Bekijk 2D- en 3D-voorbeelden
+Workflow: NEFIS|NEFIS から Python と NetCDF への処理手順|Fluxo de trabalho: de NEFIS para Python e NetCDF|Werkstroom van NEFIS naar Python en NetCDF
+Conceptual diagram|3 層の格子上にある場の概念図|Esquema de um campo em uma grade com três camadas|Schematische weergave van een veld op een rooster met drie lagen
+INTERACTIVE EXAMPLES|インタラクティブな使用例|EXEMPLOS INTERATIVOS|INTERACTIEVE VOORBEELDEN
+Explore WAVE 2D and FLOW 3D.|WAVE 2D と FLOW 3D を見る|Explore WAVE 2D e FLOW 3D.|Verken WAVE 2D en FLOW 3D.
+Choose a wave field|波浪場または流速の層を選択できます。表示値は、リポジトリの合成例から NefisReader で出力したものです。|Selecione um campo de ondas ou uma camada de velocidade. O NefisReader exportou estes valores dos exemplos sintéticos do repositório.|Kies een golfveld of een snelheidslaag. De waarden zijn met NefisReader geëxporteerd uit de synthetische voorbeelden in de repository.
+>Example<|>使用例<|>Exemplo<|>Voorbeeld<
+WAVE · 2D waves|WAVE · 2 次元波浪|WAVE · ondas 2D|WAVE · 2D-golven
+FLOW · 3D velocity|FLOW · 3 次元流速|FLOW · velocidade 3D|FLOW · 3D-stroomsnelheid
+>Variable<|>変数<|>Variável<|>Variabele<
+>Record<|>レコード<|>Registro<|>Record<
+>Layer<|>層<|>Camada<|>Laag<
+.dat and .def files|.dat と .def ファイル|Arquivos .dat e .def|.dat- en .def-bestanden
+Significant wave height|有義波高|Altura significativa das ondas|Significante golfhoogte
+Loading example…|例を読み込み中…|Carregando exemplo…|Voorbeeld wordt geladen…
+Download CSV|CSV をダウンロード|Baixar CSV|CSV downloaden
+Sample values for one plane|1 つの平面のサンプル値|Valores de exemplo em um plano|Voorbeeldwaarden voor één vlak
+Synthetic data, not observations|合成データです。観測値や論文の結果ではありません。|Dados sintéticos, não são observações nem resultados de pesquisa.|Synthetische gegevens, geen waarnemingen of scriptieresultaten.
+Enable JavaScript|JavaScript を有効にするか、ファイルの組をダウンロードして Python でお試しください。|Ative o JavaScript ou baixe os arquivos para testá-los com Python.|Schakel JavaScript in of download de bestandsparen om ze in Python te gebruiken.
+The explorer displays precomputed|ブラウザーでは事前生成した断面を表示します。パッケージをインストールすると、お手元の <code>.dat/.def</code> ファイルの組を読み込み、変換できます。このページではファイルのアップロードはできません。|O painel mostra cortes já calculados. Com o pacote instalado, você pode ler e converter seus próprios pares <code>.dat/.def</code>. Esta página não recebe arquivos.|De verkenner toont vooraf berekende doorsneden. Met het geïnstalleerde pakket kun je eigen <code>.dat/.def</code>-paren lezen en converteren. Deze pagina accepteert geen uploads.
+See maps from|出力した NetCDF から生成した地図を見る|Ver mapas feitos com um NetCDF exportado|Bekijk kaarten op basis van een geëxporteerd NetCDF-bestand
+POST-PROCESSING EXAMPLES|後処理の使用例|EXEMPLOS DE PÓS-PROCESSAMENTO|VOORBEELDEN VAN NABEWERKING
+From NetCDF to maps.|NetCDF から地図へ|Do NetCDF aos mapas.|Van NetCDF naar kaarten.
+NefisReader exports the fields.|NefisReader で出力した変数から Python で地図を作成できます。2 つの例は同じ合成海域を使用しており、数値シミュレーションやカヤオのデータではありません。図中の表記は英語です。|O NefisReader exporta os campos, que um script Python combina em mapas. Os dois exemplos usam a mesma baía sintética, sem simulação nem dados de Callao. Os rótulos das figuras estão em inglês.|NefisReader exporteert de velden. Een Python-script combineert ze tot kaarten. Beide voorbeelden gebruiken dezelfde synthetische baai, geen simulatie of gegevens uit Callao. De labels in de figuren zijn Engels.
+Open full-size bathymetry|水深とベクトルの地図を原寸で開く|Abrir mapa de batimetria e vetores em tamanho real|Open de kaart met bathymetrie en vectoren op volledige grootte
+Synthetic depth map:|合成水深図。濃い青ほど水深が大きく、金色の矢印は島の周囲のエネルギー輸送を示します。|Mapa sintético de profundidade. O azul mais escuro indica águas mais profundas, e as setas douradas mostram o transporte de energia ao redor de uma ilha.|Synthetische dieptekaart. Donkerblauw duidt op dieper water; gouden pijlen tonen het energietransport rond een eiland.
+Bathymetry and energy flux|水深とエネルギーフラックス|Batimetria e fluxo de energia|Bathymetrie en energiestroom
+Background: <code>DEPTH|背景：<code>DEPTH</code>（m）。矢印：<code>TRANSP_X</code> と <code>TRANSP_Y</code>（kW/m）。矢印は水域のみに表示します。|Fundo: <code>DEPTH</code> em metros. Setas: <code>TRANSP_X</code> e <code>TRANSP_Y</code> em kW/m, exibidas apenas sobre a água.|Achtergrond: <code>DEPTH</code> in meter. Pijlen: <code>TRANSP_X</code> en <code>TRANSP_Y</code> in kW/m, alleen boven water.
+Download PNG|PNG をダウンロード|Baixar PNG|PNG downloaden
+Open full-size wave-height|有義波高と等深線の地図を原寸で開く|Abrir mapa de altura de ondas e isóbatas em tamanho real|Open de kaart met golfhoogte en dieptecontouren op volledige grootte
+Synthetic significant wave height map|10、20、40 m の等深線を重ねた合成有義波高図です。島の背後では波高が低くなっています。|Mapa sintético da altura significativa das ondas, com isóbatas de 10, 20 e 40 m e ondas mais baixas atrás da ilha.|Synthetische kaart met significante golfhoogte, dieptecontouren op 10, 20 en 40 meter en lagere golven achter het eiland.
+Significant wave height and depth contours|有義波高と等深線|Altura significativa das ondas e isóbatas|Significante golfhoogte en dieptecontouren
+Colours: <code>HSIGN|色：<code>HSIGN</code>（m）。線：等深線。合成例では灰色が陸地です。|Cores: <code>HSIGN</code> em metros. Linhas: isóbatas. O cinza indica terra no exemplo sintético.|Kleuren: <code>HSIGN</code> in meter. Lijnen: dieptecontouren. Grijs markeert land in het synthetische voorbeeld.
+Reproduce both maps|Python で両方の地図を再現する|Reproduzir os dois mapas com Python|Reproduceer beide kaarten met Python
+INSTALLATION|インストール|INSTALAÇÃO|INSTALLATIE
+Install the package and read|パッケージをインストールしてモデル出力を読む|Instale o pacote e leia os resultados do seu modelo.|Installeer het pakket en lees je modeluitvoer.
+Linux x86-64, Python 3.9+|Linux x86-64、Python 3.9 以降、依存関係のインストール用のインターネット接続が必要です。|Linux x86-64, Python 3.9 ou posterior e acesso à internet para instalar as dependências.|Linux x86-64, Python 3.9 of hoger en internettoegang om de afhankelijkheden te installeren.
+Download the package|パッケージをダウンロード|Baixe o pacote|Download het pakket
+and run these commands|し、ダウンロードフォルダーで以下のコマンドを実行してください。Delft3D のインストールは不要です。|e execute estes comandos na pasta de downloads. Não é necessário instalar o Delft3D.|en voer deze commando’s uit vanuit je downloadmap. Je hoeft Delft3D niet te installeren.
+>Copy<|>コピー<|>Copiar<|>Kopiëren<
+Already have a file?|出力ファイルをお持ちですか？|Já tem um arquivo?|Heb je al een uitvoerbestand?
+Pass a <code>.dat|<code>d3dnefis</code> に <code>.dat</code> ファイルまたは計算結果のフォルダーを渡します。<code>--inventory</code> を指定すると、変換せずに変数を確認できます。|Passe um arquivo <code>.dat</code> ou a pasta da simulação para <code>d3dnefis</code>. Use <code>--inventory</code> para listar as variáveis sem converter.|Geef een <code>.dat</code>-bestand of de uitvoermap aan <code>d3dnefis</code>. Gebruik <code>--inventory</code> om variabelen te bekijken zonder ze te converteren.
+Connect your agent|MCP でエージェントを接続|Conecte seu agente via MCP|Verbind je agent via MCP
+The local server lists|ローカルサーバーは、許可したフォルダー内の NEFIS や NetCDF ファイルから、変数一覧や部分データを読み取ります。Python 3.10 以降が必要です。|O servidor local lista variáveis e lê cortes de arquivos NEFIS ou NetCDF na pasta autorizada. Requer Python 3.10 ou posterior.|De lokale server toont variabelen en leest deelgegevens uit NEFIS- of NetCDF-bestanden in de toegestane map. Vereist Python 3.10 of hoger.
+MCP guide for Codex|Codex などのクライアント向け MCP ガイド|Guia MCP para Codex e outros clientes|MCP-handleiding voor Codex en andere clients
+CREDITS AND SCOPE|クレジットと適用範囲|CRÉDITOS E ESCOPO|BRONNEN EN TOEPASSING
+Open-source software.|オープンソースソフトウェア|Software de código aberto.|Open-sourcesoftware.
+is an independent project.|は独立したプロジェクトです。Deltares の公式製品ではなく、同社の推奨を受けたものでもありません。|é um projeto independente. Não é um produto oficial nem tem o endosso da Deltares.|is een onafhankelijk project. Het is geen officieel product van Deltares en wordt niet door Deltares onderschreven.
+Deltares develops the NEFIS|NEFIS ライブラリは Deltares が開発しています。その|A biblioteca NEFIS é desenvolvida pela Deltares. O|Deltares ontwikkelt de NEFIS-bibliotheek. De
+source code, notices and build|ソースコード、ライセンス表示、ビルド手順|código-fonte, os avisos e as instruções de compilação|broncode, kennisgevingen en bouwinstructies
+are distributed separately|はリポジトリ内で別に配布しています。使用例は合成データで、論文のデータは含みません。|são distribuídos separadamente no repositório. Os exemplos são sintéticos e não contêm dados de pesquisa.|worden apart in de repository verspreid. De voorbeelden zijn synthetisch en bevatten geen scriptiegegevens.
+The project's own code uses|本プロジェクトのコードのライセンス：|O código do projeto usa a|De eigen code valt onder de
+MIT licence|MIT ライセンス|licença MIT|MIT-licentie
+The Deltares NEFIS library retains|Deltares の NEFIS ライブラリ：|A biblioteca NEFIS da Deltares mantém seus|Voor de NEFIS-bibliotheek van Deltares gelden de
+own notices and licence|固有のライセンスと表示|próprios avisos e sua própria licença|eigen kennisgevingen en licentie
+Was NefisReader useful?|NefisReader は役に立ちましたか？|O NefisReader foi útil?|Was NefisReader nuttig?
+Star on GitHub|GitHub でスターを付ける|Dê uma estrela no GitHub|Geef een ster op GitHub
+Sign in on GitHub and click|GitHub にログインし、<strong>Star</strong> をクリックしてリポジトリを保存し、プロジェクトを応援してください。|Entre no GitHub e clique em <strong>Star</strong> para salvar o repositório e apoiar o projeto.|Log in bij GitHub en klik op <strong>Star</strong> om de repository te bewaren en het project te steunen.
+If you'd like to support|寄付でプロジェクトを支援したい方は、|Se quiser apoiar o projeto com uma doação voluntária,|Wil je het project steunen met een vrijwillige donatie?
+get in touch!|ご連絡ください！|entre em contato!|Neem contact op!
+This opens a public GitHub issue.|このリンクは公開の GitHub issue を開きます。支払い情報は記載しないでください。|O link abre uma issue pública no GitHub. Não compartilhe dados de pagamento ali.|Deze link opent een openbare GitHub-issue. Deel daar geen betaalgegevens.
+Report an issue|問題を報告|Relatar um problema|Meld een probleem

@@ -2,7 +2,10 @@
 
 [English README](README.en.md) · [Español](https://mapsm12.github.io/NefisReader/docs/es.html) ·
 [Bahasa Indonesia](https://mapsm12.github.io/NefisReader/docs/id.html) ·
-[简体中文](https://mapsm12.github.io/NefisReader/docs/zh.html)
+[简体中文](https://mapsm12.github.io/NefisReader/docs/zh.html) ·
+[日本語](https://mapsm12.github.io/NefisReader/docs/ja.html) ·
+[Português (Brasil)](https://mapsm12.github.io/NefisReader/docs/pt.html) ·
+[Nederlands](https://mapsm12.github.io/NefisReader/docs/nl.html)
 
 Paquete instalable de software libre que incluye el conversor `d3dnefis`.
 Lee parejas NEFIS `.dat` + `.def`
