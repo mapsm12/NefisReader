@@ -6,7 +6,7 @@ mediante la API C de la biblioteca NEFIS con Python y `ctypes`, y exporta
 los campos numéricos a NetCDF-4. No requiere MATLAB ni volver a ejecutar
 Delft3D. El flujo probado es Delft3D 4-WAVE en Linux x86-64.
 
-**[Página de NefisReader y demo interactiva](https://nefisreader.mapsm12.chatgpt.site/)** ·
+**[Página de NefisReader y demo interactiva](https://mapsm12.github.io/NefisReader/)** ·
 [Código de la web](docs/) · [Créditos y avisos de licencia](AVISOS.md)
 
 ## 1. Instalación
