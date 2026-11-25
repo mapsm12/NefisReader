@@ -1,6 +1,6 @@
 # Créditos, licencias y redistribución
 
-- **NefisReader:** lector, conversor y ejemplos de Miguel Andrade Pereira.
+- **NefisReader:** lector, conversor y ejemplos del proyecto.
   Proyecto independiente; no es Delft3D ni un producto oficial de Deltares.
   El código propio, incluida la web y el servidor MCP, se publica bajo
   [licencia MIT](LICENSE). Se puede usar, copiar, modificar y redistribuir

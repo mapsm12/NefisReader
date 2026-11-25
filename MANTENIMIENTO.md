@@ -109,6 +109,6 @@ están junto al binario. Véanse [AVISOS.md](AVISOS.md) y el archivo de
 [procedencia nativa](native/README.md). No se redistribuyen modelos,
 datos de la tesis ni software de terceros ajeno al conversor.
 
-Autor: [Miguel Andrade Pereira / @mapsm12](https://github.com/mapsm12).
-Se aceptan donaciones voluntarias: [consulta por GitHub](https://github.com/mapsm12/NefisReader/issues/new?title=Consulta%20sobre%20donaciones%20a%20NefisReader).
+Si quieres apoyar el proyecto con una donación voluntaria,
+[¡contáctame!](https://github.com/mapsm12/NefisReader/issues/new?title=Consulta%20sobre%20donaciones%20a%20NefisReader)
 No publiques información personal ni de pago en un ticket.

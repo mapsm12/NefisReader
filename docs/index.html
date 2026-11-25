@@ -81,11 +81,11 @@
     <section id="instalar" class="setup">
       <div class="shell section">
         <div class="section-head"><p class="eyebrow">INSTALACIÓN</p><h2>Instala el paquete y lee tus corridas.</h2>
-          <p>Linux x86-64, Python 3.9+ y conexión a internet para instalar dependencias. La biblioteca NEFIS incluida no requiere instalar Delft3D.</p></div>
+          <p>Linux x86-64, Python 3.9+ y conexión a internet para instalar dependencias. <a href="https://github.com/mapsm12/NefisReader/archive/refs/heads/main.tar.gz">Descarga el paquete</a> y ejecuta estos comandos desde la carpeta de descargas. No necesitas instalar Delft3D.</p></div>
         <div class="setup-grid">
           <div class="terminal"><div class="terminal-top"><span>Terminal · Linux</span><button data-copy="install-command" class="small" type="button">Copiar</button></div>
-<pre id="install-command"><code>git clone https://github.com/mapsm12/NefisReader.git
-cd NefisReader
+<pre id="install-command"><code>tar -xzf NefisReader-main.tar.gz
+cd NefisReader-main
 python3 -m venv .venv
 source .venv/bin/activate
 bash scripts/install.sh
@@ -104,19 +104,18 @@ python examples/leer_mallas.py \
     </section>
     <section id="creditos" class="shell section credits">
       <div><p class="eyebrow">CRÉDITOS Y ALCANCE</p><h2>Software libre, con fuentes.</h2></div>
-      <div><p><strong>NefisReader</strong> es un proyecto independiente de Miguel Andrade Pereira. No es un producto oficial de Deltares ni implica su respaldo.</p>
+      <div><p><strong>NefisReader</strong> es un proyecto independiente. No es un producto oficial de Deltares ni implica su respaldo.</p>
         <p>La biblioteca NEFIS corresponde a Deltares. Sus <a href="https://github.com/mapsm12/NefisReader/blob/main/native/README.md">fuentes, avisos y pasos de compilación</a> se distribuyen por separado dentro del repositorio. Los ejemplos son sintéticos; no contienen datos de la tesis.</p>
         <p>El código propio está bajo <a href="https://github.com/mapsm12/NefisReader/blob/main/LICENSE">licencia MIT</a>. La biblioteca NEFIS de Deltares conserva sus <a href="https://github.com/mapsm12/NefisReader/blob/main/AVISOS.md">avisos y licencia propios</a>.</p></div>
     </section>
     <section id="apoyar" class="setup">
       <div class="shell section credits">
-        <div><p class="eyebrow">DONACIONES VOLUNTARIAS</p><h2>Apoya el proyecto.</h2></div>
-        <div><p>Si NefisReader te ahorró tiempo y quieres apoyar su mantenimiento, se aceptan donaciones. Es totalmente voluntario: la instalación y el uso no tienen costo.</p>
-          <a class="textlink" href="https://github.com/mapsm12/NefisReader/issues/new?title=Consulta%20sobre%20donaciones%20a%20NefisReader">Contactar a Miguel (@mapsm12)</a>
-          <p class="fine">La consulta en GitHub es pública. No publiques datos personales ni de pago.</p></div>
+        <div><h2>¿Te sirvió NefisReader?</h2></div>
+        <div><p>Si quieres apoyar el proyecto con una donación voluntaria, <a class="textlink" href="https://github.com/mapsm12/NefisReader/issues/new?title=Consulta%20sobre%20donaciones%20a%20NefisReader">¡contáctame!</a></p>
+          <p class="fine">El enlace abre una consulta pública en GitHub. No compartas datos de pago.</p></div>
       </div>
     </section>
   </main>
-  <footer class="top"><div class="shell nav"><span>NefisReader · Miguel Andrade Pereira</span><a href="https://github.com/mapsm12/NefisReader/issues">Reportar un problema</a></div></footer>
+  <footer class="top"><div class="shell nav"><span>NefisReader · v0.1</span><a href="https://github.com/mapsm12/NefisReader/issues">Reportar un problema</a></div></footer>
 </body>
 </html>
