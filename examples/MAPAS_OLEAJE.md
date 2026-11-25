@@ -19,6 +19,7 @@ python examples/graficar_oleaje.py \
 ```
 
 Se generan `batimetria_vectores.png` y `altura_isobatas.png`.
+Para obtener las figuras en inglés añade `--lang en`.
 Los nombres `map_series__XP`, `YP`, `DEPTH`, `HSIGN`,
 `TRANSP_X` y `TRANSP_Y` corresponden a los elementos exportados
 (todos con el mismo prefijo `map_series__`). El script lee un

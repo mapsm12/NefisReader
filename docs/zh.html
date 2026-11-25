@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="使用 Python 读取 Delft3D 4 的 NEFIS 输出并转为 NetCDF。试用 WAVE 2D 和 FLOW 3D 示例。">
+  <meta name="theme-color" content="#081e2c">
+  <title>NefisReader v0.1 — 适用于 Delft3D 4 的 Python 软件包</title>
+  <link rel="alternate" hreflang="en" href="index.html">
+  <link rel="alternate" hreflang="es" href="es.html">
+  <link rel="alternate" hreflang="id" href="id.html">
+  <link rel="alternate" hreflang="zh-Hans" href="zh.html">
+  <link rel="alternate" hreflang="x-default" href="index.html">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="i18n.js"></script>
+  <script defer src="demo-data.js"></script>
+  <script defer src="demo.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">跳转到内容</a>
+  <header class="top">
+    <div class="shell nav">
+      <a class="brand" href="#" aria-label="NefisReader 首页"><span aria-hidden="true" class="mark">≋</span>NefisReader</a>
+      <nav aria-label="主导航">
+        <a href="#demo">示例</a><a href="#instalar">安装</a>
+        <a href="https://github.com/mapsm12/NefisReader">GitHub</a>
+      </nav>
+      <nav class="languages" aria-label="语言">
+        <a href="index.html" data-lang="en" lang="en" hreflang="en">English</a>
+        <a href="es.html" data-lang="es" lang="es" hreflang="es">Español</a>
+        <a href="id.html" data-lang="id" lang="id" hreflang="id">Bahasa Indonesia</a>
+        <a href="zh.html" data-lang="zh-Hans" lang="zh-Hans" hreflang="zh-Hans" aria-current="page">简体中文</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <section class="hero">
+      <div class="shell intro">
+        <div>
+          <p class="eyebrow">开源 PYTHON 软件包 · V0.1</p>
+          <h1>NefisReader</h1>
+          <p class="lead">读取 Delft3D 4 的 NEFIS 输出并转为 <strong>NetCDF</strong>。提供 <code>d3dnefis</code> 命令、Python API 和可选的 MCP 服务器。</p>
+          <div class="actions"><a class="button primary" href="#instalar">在 Linux 上安装</a><a class="button outline" href="#demo">浏览 2D 和 3D 示例</a></div>
+        </div>
+        <div class="schematic" aria-label="工作流程：从 NEFIS 到 Python 和 NetCDF">
+          <svg viewBox="0 0 420 238" role="img" aria-labelledby="sketch">
+            <title id="sketch">三层网格上的场示意图</title>
+            <defs>
+              <pattern id="grid" width="26" height="18" patternUnits="userSpaceOnUse"><path d="M 26 0 L 0 0 0 18" stroke="#7ee0d4" stroke-opacity=".35" fill="none"/></pattern>
+              <linearGradient id="plane"><stop stop-color="#26b7a7" stop-opacity=".7"/><stop offset="1" stop-color="#136785" stop-opacity=".15"/></linearGradient>
+            </defs>
+            <g transform="translate(48 53) skewX(-28)">
+              <g fill="url(#grid)" stroke="#5097a1" stroke-width="1">
+                <rect x="85" y="76" width="260" height="96"/>
+                <rect x="54" y="38" width="260" height="96"/>
+                <rect x="24" y="0" width="260" height="96"/>
+              </g>
+              <rect x="24" y="0" width="260" height="96" fill="url(#plane)" opacity=".55"/>
+              <g fill="none" stroke="#b6fff1" stroke-width="1.5" opacity=".8">
+                <path d="M31 65 Q106 66 147 36 T272 24"/>
+                <path d="M31 77 Q112 78 155 48 T277 35"/>
+                <path d="M31 87 Q112 89 164 60 T280 45"/>
+              </g>
+            </g>
+          </svg>
+          <div class="diagram-labels"><span>.dat + .def</span><span>Python</span><span>.nc</span></div>
+        </div>
+      </div>
+    </section>
+    <section id="demo" class="shell section">
+      <div class="section-head"><p class="eyebrow">交互式示例</p><h2>浏览 WAVE 2D 和 FLOW 3D</h2>
+        <p>请选择波浪场或流速层。这些数值由 NefisReader 从仓库中的合成示例导出。</p></div>
+      <div class="workbench">
+        <div class="controls">
+          <label>示例<select id="case"><option value="wave">WAVE · 二维波浪</option><option value="flow">FLOW · 三维流速</option></select></label>
+          <label>变量<select id="variable"><option>HSIGN</option></select></label>
+          <label>记录<select id="record"><option value="0">0</option></select></label>
+          <label id="layer-control" hidden>层<select id="layer"><option value="0">0</option></select></label>
+          <a class="textlink" href="https://github.com/mapsm12/NefisReader/tree/main/examples/data">.dat 和 .def 文件</a>
+        </div>
+        <div class="result">
+          <div class="result-head"><div><h3 id="variable-title">有效波高</h3><p id="shape">正在加载示例…</p></div><button id="csv" class="small" type="button" disabled>下载 CSV</button></div>
+          <div class="matrix-wrap">
+            <table class="matrix" id="matrix" aria-label="单层示例数值"></table>
+          </div>
+          <div class="scale"><span id="min"></span><span class="ramp" aria-hidden="true"></span><span id="max"></span></div>
+          <p id="status" class="muted" role="status">合成数据，非观测数据或论文结果。</p>
+          <noscript><p>请启用 JavaScript，或下载文件对后在 Python 中试用。</p></noscript>
+        </div>
+      </div>
+      <p class="fine">浏览器展示预先生成的切片。安装软件包后可读取、转换自己的 <code>.dat/.def</code> 文件对。本网页不接收文件上传。</p>
+      <p><a class="textlink" href="#mapas">查看用导出的 NetCDF 生成的地图</a></p>
+    </section>
+    <section id="mapas" class="shell section map-section">
+      <div class="section-head"><p class="eyebrow">后处理示例</p><h2>从 NetCDF 到地图</h2>
+        <p>NefisReader 导出各个变量场，再通过 Python 脚本绘制地图。两幅图使用同一合成海湾，并非数值模拟或卡亚俄实测数据。图内标注为英文。</p></div>
+      <div class="map-gallery">
+        <figure>
+          <a href="figures/bathymetry_vectors.png" aria-label="打开全尺寸水深和矢量图">
+            <img src="figures/bathymetry_vectors.png" width="1200" height="944" loading="lazy" decoding="async" alt="合成水深图：蓝色越深表示水越深；金色箭头表示岛屿周围的能量输运。">
+          </a>
+          <figcaption><h3>水深与能量通量</h3>
+            <p>底图：<code>DEPTH</code>，单位米。箭头：<code>TRANSP_X</code> 和 <code>TRANSP_Y</code>，单位 kW/m，仅在水域绘制。</p>
+            <a href="figures/bathymetry_vectors.png" download>下载 PNG</a>
+          </figcaption>
+        </figure>
+        <figure>
+          <a href="figures/height_depth_contours.png" aria-label="打开全尺寸有效波高及等深线图">
+            <img src="figures/height_depth_contours.png" width="1200" height="944" loading="lazy" decoding="async" alt="合成有效波高图包含 10、20 和 40 米等深线，岛后波高较低。">
+          </a>
+          <figcaption><h3>有效波高与等深线</h3>
+            <p>颜色表示 <code>HSIGN</code>（米），线条表示等深线。合成示例中的灰色区域为陆地。</p>
+            <a href="figures/height_depth_contours.png" download>下载 PNG</a>
+          </figcaption>
+        </figure>
+      </div>
+      <p class="map-source"><a class="textlink" href="https://github.com/mapsm12/NefisReader/blob/main/README.en.md#reproduce-the-maps">使用 Python 复现两幅图</a></p>
+    </section>
+    <section id="instalar" class="setup">
+      <div class="shell section">
+        <div class="section-head"><p class="eyebrow">安装</p><h2>安装软件包并读取模型输出</h2>
+          <p>需要 Linux x86-64 和 Python 3.9+。安装依赖时需要联网。 <a href="https://github.com/mapsm12/NefisReader/archive/refs/heads/main.tar.gz">下载软件包</a> 后，在下载目录中运行以下命令。无需安装 Delft3D。</p></div>
+        <div class="setup-grid">
+          <div class="terminal"><div class="terminal-top"><span>Terminal · Linux</span><button data-copy="install-command" class="small" type="button">复制</button></div>
+<pre id="install-command"><code>tar -xzf NefisReader-main.tar.gz
+cd NefisReader-main
+python3 -m venv .venv
+source .venv/bin/activate
+bash scripts/install.sh
+d3dnefis examples/data
+python examples/leer_mallas.py \
+  examples/data/NETCDF_EXPORT/wavm-demo-2d.nc \
+  examples/data/NETCDF_EXPORT/trim-demo-3d.nc</code></pre>
+          </div>
+          <div class="side">
+            <h3>已有输出文件？</h3><p>将 <code>.dat</code> 文件或运行目录传给 <code>d3dnefis</code>。使用 <code>--inventory</code> 可查看变量而不进行转换。</p>
+            <h3>通过 MCP 连接智能体</h3><p>本地服务器可列出变量，并读取授权目录中 NEFIS 或 NetCDF 文件的切片。需要 Python 3.10+。</p>
+            <a class="textlink" href="https://github.com/mapsm12/NefisReader/blob/main/README.en.md#mcp">面向 Codex 和其他客户端的 MCP 指南</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="creditos" class="shell section credits">
+      <div><p class="eyebrow">致谢与适用范围</p><h2>开源软件</h2></div>
+      <div><p><strong>NefisReader</strong> 是一个独立项目，并非 Deltares 官方产品，也不代表得到其背书。</p>
+        <p>NEFIS 库由 Deltares 开发。其 <a href="https://github.com/mapsm12/NefisReader/blob/main/native/README.md">源代码、声明和编译说明</a> 在仓库中单独提供。示例为合成数据，不包含论文数据。</p>
+        <p>本项目自有代码采用 <a href="https://github.com/mapsm12/NefisReader/blob/main/LICENSE">MIT 许可证</a>. Deltares 的 NEFIS 库保留其 <a href="https://github.com/mapsm12/NefisReader/blob/main/AVISOS.md">原有的声明和许可证</a>.</p></div>
+    </section>
+    <section id="apoyar" class="setup">
+      <div class="shell section credits">
+        <div><h2>NefisReader 对你有帮助吗？</h2></div>
+        <div><p><a class="button star" href="https://github.com/mapsm12/NefisReader"><span aria-hidden="true">★</span> 在 GitHub 上点星</a></p>
+          <p>登录 GitHub 后，点击 <strong>Star</strong> 收藏仓库并支持项目。</p>
+          <p>如果你愿意通过自愿捐赠支持项目， <a class="textlink" href="https://github.com/mapsm12/NefisReader/issues/new?title=NefisReader%20donation%20inquiry">欢迎联系我！</a></p>
+          <p class="fine">链接会打开公开的 GitHub issue，请勿在那里发布付款信息。</p></div>
+      </div>
+    </section>
+  </main>
+  <footer class="top"><div class="shell nav"><span>NefisReader · v0.1</span><a href="https://github.com/mapsm12/NefisReader/issues">报告问题</a></div></footer>
+</body>
+</html>

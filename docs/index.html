@@ -1,23 +1,35 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Explora salidas Delft3D 4 en NEFIS y conviértelas a NetCDF con Python. Prueba ejemplos WAVE 2D y FLOW 3D.">
+  <meta name="description" content="Read Delft3D 4 NEFIS outputs and convert them to NetCDF with Python. Try WAVE 2D and FLOW 3D examples.">
   <meta name="theme-color" content="#081e2c">
-  <title>NefisReader v0.1 — Paquete Python para Delft3D 4</title>
+  <title>NefisReader v0.1 — Python package for Delft3D 4</title>
+  <link rel="alternate" hreflang="en" href="index.html">
+  <link rel="alternate" hreflang="es" href="es.html">
+  <link rel="alternate" hreflang="id" href="id.html">
+  <link rel="alternate" hreflang="zh-Hans" href="zh.html">
+  <link rel="alternate" hreflang="x-default" href="index.html">
   <link rel="stylesheet" href="style.css">
+  <script defer src="i18n.js"></script>
   <script defer src="demo-data.js"></script>
   <script defer src="demo.js"></script>
 </head>
 <body>
-  <a class="skip" href="#main">Saltar al contenido</a>
+  <a class="skip" href="#main">Skip to content</a>
   <header class="top">
     <div class="shell nav">
-      <a class="brand" href="#" aria-label="NefisReader, inicio"><span aria-hidden="true" class="mark">≋</span>NefisReader</a>
-      <nav aria-label="Principal">
-        <a href="#demo">Ejemplos</a><a href="#instalar">Instalación</a>
+      <a class="brand" href="#" aria-label="NefisReader home"><span aria-hidden="true" class="mark">≋</span>NefisReader</a>
+      <nav aria-label="Main navigation">
+        <a href="#demo">Examples</a><a href="#instalar">Install</a>
         <a href="https://github.com/mapsm12/NefisReader">GitHub</a>
+      </nav>
+      <nav class="languages" aria-label="Language">
+        <a href="index.html" data-lang="en" lang="en" hreflang="en" aria-current="page">English</a>
+        <a href="es.html" data-lang="es" lang="es" hreflang="es">Español</a>
+        <a href="id.html" data-lang="id" lang="id" hreflang="id">Bahasa Indonesia</a>
+        <a href="zh.html" data-lang="zh-Hans" lang="zh-Hans" hreflang="zh-Hans">简体中文</a>
       </nav>
     </div>
   </header>
@@ -25,14 +37,14 @@
     <section class="hero">
       <div class="shell intro">
         <div>
-          <p class="eyebrow">PAQUETE PYTHON LIBRE · V0.1</p>
+          <p class="eyebrow">OPEN-SOURCE PYTHON PACKAGE · V0.1</p>
           <h1>NefisReader</h1>
-          <p class="lead">Lee salidas NEFIS de Delft3D 4 y conviértelas a <strong>NetCDF</strong>. Incluye la herramienta <code>d3dnefis</code>, una API Python y un servidor MCP opcional.</p>
-          <div class="actions"><a class="button primary" href="#instalar">Instalar en Linux</a><a class="button outline" href="#demo">Explorar ejemplos 2D y 3D</a></div>
+          <p class="lead">Read Delft3D 4 NEFIS outputs and convert them to <strong>NetCDF</strong>. Includes the <code>d3dnefis</code> command, a Python API, and an optional MCP server.</p>
+          <div class="actions"><a class="button primary" href="#instalar">Install on Linux</a><a class="button outline" href="#demo">Explore 2D and 3D examples</a></div>
         </div>
-        <div class="schematic" aria-label="Flujo de trabajo: de NEFIS a Python y NetCDF">
+        <div class="schematic" aria-label="Workflow: NEFIS to Python and NetCDF">
           <svg viewBox="0 0 420 238" role="img" aria-labelledby="sketch">
-            <title id="sketch">Un campo sobre una malla en tres capas, esquema conceptual</title>
+            <title id="sketch">Conceptual diagram of a field on a three-layer grid</title>
             <defs>
               <pattern id="grid" width="26" height="18" patternUnits="userSpaceOnUse"><path d="M 26 0 L 0 0 0 18" stroke="#7ee0d4" stroke-opacity=".35" fill="none"/></pattern>
               <linearGradient id="plane"><stop stop-color="#26b7a7" stop-opacity=".7"/><stop offset="1" stop-color="#136785" stop-opacity=".15"/></linearGradient>
@@ -56,60 +68,60 @@
       </div>
     </section>
     <section id="demo" class="shell section">
-      <div class="section-head"><p class="eyebrow">EJEMPLOS INTERACTIVOS</p><h2>Explorador WAVE 2D y FLOW 3D.</h2>
-        <p>Elige un campo de oleaje o una capa de velocidad. Los valores se exportaron con NefisReader a partir de los ejemplos sintéticos del repositorio.</p></div>
+      <div class="section-head"><p class="eyebrow">INTERACTIVE EXAMPLES</p><h2>Explore WAVE 2D and FLOW 3D.</h2>
+        <p>Choose a wave field or a velocity layer. NefisReader exported these values from the repository's synthetic examples.</p></div>
       <div class="workbench">
         <div class="controls">
-          <label>Ejemplo<select id="case"><option value="wave">WAVE · oleaje 2D</option><option value="flow">FLOW · velocidad 3D</option></select></label>
+          <label>Example<select id="case"><option value="wave">WAVE · 2D waves</option><option value="flow">FLOW · 3D velocity</option></select></label>
           <label>Variable<select id="variable"><option>HSIGN</option></select></label>
-          <label>Registro<select id="record"><option value="0">0</option></select></label>
-          <label id="layer-control" hidden>Capa<select id="layer"><option value="0">0</option></select></label>
-          <a class="textlink" href="https://github.com/mapsm12/NefisReader/tree/main/examples/data">Archivos .dat y .def</a>
+          <label>Record<select id="record"><option value="0">0</option></select></label>
+          <label id="layer-control" hidden>Layer<select id="layer"><option value="0">0</option></select></label>
+          <a class="textlink" href="https://github.com/mapsm12/NefisReader/tree/main/examples/data">.dat and .def files</a>
         </div>
         <div class="result">
-          <div class="result-head"><div><h3 id="variable-title">Altura significativa</h3><p id="shape">Cargando ejemplo…</p></div><button id="csv" class="small" type="button" disabled>Descargar CSV</button></div>
+          <div class="result-head"><div><h3 id="variable-title">Significant wave height</h3><p id="shape">Loading example…</p></div><button id="csv" class="small" type="button" disabled>Download CSV</button></div>
           <div class="matrix-wrap">
-            <table class="matrix" id="matrix" aria-label="Plano de valores de ejemplo"></table>
+            <table class="matrix" id="matrix" aria-label="Sample values for one plane"></table>
           </div>
           <div class="scale"><span id="min"></span><span class="ramp" aria-hidden="true"></span><span id="max"></span></div>
-          <p id="status" class="muted" role="status">Datos sintéticos; no son observaciones ni resultados de la tesis.</p>
-          <noscript><p>Activa JavaScript o descarga las parejas para probar en Python.</p></noscript>
+          <p id="status" class="muted" role="status">Synthetic data, not observations or thesis results.</p>
+          <noscript><p>Enable JavaScript or download the file pairs to try them in Python.</p></noscript>
         </div>
       </div>
-      <p class="fine">El explorador visualiza cortes de ejemplo ya calculados. El paquete instalado lee y convierte tus propias parejas <code>.dat/.def</code>. La página no recibe archivos.</p>
-      <p><a class="textlink" href="#mapas">Ver mapas generados a partir de un NetCDF exportado</a></p>
+      <p class="fine">The explorer displays precomputed slices. The installed package reads and converts your own <code>.dat/.def</code> pairs. This page does not accept uploads.</p>
+      <p><a class="textlink" href="#mapas">See maps from an exported NetCDF</a></p>
     </section>
     <section id="mapas" class="shell section map-section">
-      <div class="section-head"><p class="eyebrow">EJEMPLOS DE POSPROCESO</p><h2>Del NetCDF al mapa.</h2>
-        <p>NefisReader exporta los campos. Un script de Python los combina para dibujar mapas de oleaje. Ambos ejemplos usan la misma bahía sintética: no son simulaciones ni datos del Callao.</p></div>
+      <div class="section-head"><p class="eyebrow">POST-PROCESSING EXAMPLES</p><h2>From NetCDF to maps.</h2>
+        <p>NefisReader exports the fields. A Python script combines them into maps. Both examples use the same synthetic bay, not a simulation or data from Callao.</p></div>
       <div class="map-gallery">
         <figure>
-          <a href="figures/batimetria_vectores.png" aria-label="Abrir mapa de batimetría y vectores a tamaño completo">
-            <img src="figures/batimetria_vectores.png" width="1200" height="944" loading="lazy" decoding="async" alt="Mapa sintético de profundidad: el azul se oscurece hacia aguas profundas y las flechas doradas muestran el transporte de energía alrededor de una isla.">
+          <a href="figures/bathymetry_vectors.png" aria-label="Open full-size bathymetry and vector map">
+            <img src="figures/bathymetry_vectors.png" width="1200" height="944" loading="lazy" decoding="async" alt="Synthetic depth map: darker blue means deeper water, and gold arrows show energy transport around an island.">
           </a>
-          <figcaption><h3>Batimetría y flujo de energía</h3>
-            <p>Fondo: <code>DEPTH</code> en metros. Flechas: <code>TRANSP_X</code> y <code>TRANSP_Y</code> en kW/m. Solo se dibujan sobre agua.</p>
-            <a href="figures/batimetria_vectores.png" download>Descargar PNG</a>
+          <figcaption><h3>Bathymetry and energy flux</h3>
+            <p>Background: <code>DEPTH</code> in metres. Arrows: <code>TRANSP_X</code> and <code>TRANSP_Y</code> in kW/m, shown only over water.</p>
+            <a href="figures/bathymetry_vectors.png" download>Download PNG</a>
           </figcaption>
         </figure>
         <figure>
-          <a href="figures/altura_isobatas.png" aria-label="Abrir mapa de altura significativa e isóbatas a tamaño completo">
-            <img src="figures/altura_isobatas.png" width="1200" height="944" loading="lazy" decoding="async" alt="Mapa sintético de altura significativa con isóbatas de 10, 20 y 40 metros y una franja de menor altura detrás de la isla.">
+          <a href="figures/height_depth_contours.png" aria-label="Open full-size wave-height and depth-contour map">
+            <img src="figures/height_depth_contours.png" width="1200" height="944" loading="lazy" decoding="async" alt="Synthetic significant wave height map with 10, 20 and 40 metre depth contours and lower waves behind the island.">
           </a>
-          <figcaption><h3>Altura significativa e isóbatas</h3>
-            <p>Colores: <code>HSIGN</code> en metros. Líneas: contornos de igual profundidad. El gris identifica tierra en el ejemplo sintético.</p>
-            <a href="figures/altura_isobatas.png" download>Descargar PNG</a>
+          <figcaption><h3>Significant wave height and depth contours</h3>
+            <p>Colours: <code>HSIGN</code> in metres. Lines: depth contours. Grey marks land in the synthetic example.</p>
+            <a href="figures/height_depth_contours.png" download>Download PNG</a>
           </figcaption>
         </figure>
       </div>
-      <p class="map-source"><a class="textlink" href="https://github.com/mapsm12/NefisReader/blob/main/examples/MAPAS_OLEAJE.md">Reproducir ambos mapas con Python</a></p>
+      <p class="map-source"><a class="textlink" href="https://github.com/mapsm12/NefisReader/blob/main/README.en.md#reproduce-the-maps">Reproduce both maps with Python</a></p>
     </section>
     <section id="instalar" class="setup">
       <div class="shell section">
-        <div class="section-head"><p class="eyebrow">INSTALACIÓN</p><h2>Instala el paquete y lee tus corridas.</h2>
-          <p>Linux x86-64, Python 3.9+ y conexión a internet para instalar dependencias. <a href="https://github.com/mapsm12/NefisReader/archive/refs/heads/main.tar.gz">Descarga el paquete</a> y ejecuta estos comandos desde la carpeta de descargas. No necesitas instalar Delft3D.</p></div>
+        <div class="section-head"><p class="eyebrow">INSTALLATION</p><h2>Install the package and read your model outputs.</h2>
+          <p>Linux x86-64, Python 3.9+, and internet access to install dependencies. <a href="https://github.com/mapsm12/NefisReader/archive/refs/heads/main.tar.gz">Download the package</a> and run these commands from your downloads folder. You do not need to install Delft3D.</p></div>
         <div class="setup-grid">
-          <div class="terminal"><div class="terminal-top"><span>Terminal · Linux</span><button data-copy="install-command" class="small" type="button">Copiar</button></div>
+          <div class="terminal"><div class="terminal-top"><span>Terminal · Linux</span><button data-copy="install-command" class="small" type="button">Copy</button></div>
 <pre id="install-command"><code>tar -xzf NefisReader-main.tar.gz
 cd NefisReader-main
 python3 -m venv .venv
@@ -121,27 +133,29 @@ python examples/leer_mallas.py \
   examples/data/NETCDF_EXPORT/trim-demo-3d.nc</code></pre>
           </div>
           <div class="side">
-            <h3>¿Ya tienes un archivo?</h3><p>Pasa un archivo <code>.dat</code> o la carpeta de la corrida a <code>d3dnefis</code>. Con <code>--inventory</code> puedes revisar las variables sin convertir.</p>
-            <h3>Conecta tu agente por MCP</h3><p>El servidor local inventaría y lee recortes de NEFIS o NetCDF en la carpeta autorizada. Requiere Python 3.10+.</p>
-            <a class="textlink" href="https://github.com/mapsm12/NefisReader/blob/main/MCP.md">Guía MCP para Codex y otros clientes</a>
+            <h3>Already have a file?</h3><p>Pass a <code>.dat</code> file or the run folder to <code>d3dnefis</code>. Use <code>--inventory</code> to list variables without converting.</p>
+            <h3>Connect your agent via MCP</h3><p>The local server lists variables and reads slices from NEFIS or NetCDF files in the allowed folder. Requires Python 3.10+.</p>
+            <a class="textlink" href="https://github.com/mapsm12/NefisReader/blob/main/README.en.md#mcp">MCP guide for Codex and other clients</a>
           </div>
         </div>
       </div>
     </section>
     <section id="creditos" class="shell section credits">
-      <div><p class="eyebrow">CRÉDITOS Y ALCANCE</p><h2>Software libre, con fuentes.</h2></div>
-      <div><p><strong>NefisReader</strong> es un proyecto independiente. No es un producto oficial de Deltares ni implica su respaldo.</p>
-        <p>La biblioteca NEFIS corresponde a Deltares. Sus <a href="https://github.com/mapsm12/NefisReader/blob/main/native/README.md">fuentes, avisos y pasos de compilación</a> se distribuyen por separado dentro del repositorio. Los ejemplos son sintéticos; no contienen datos de la tesis.</p>
-        <p>El código propio está bajo <a href="https://github.com/mapsm12/NefisReader/blob/main/LICENSE">licencia MIT</a>. La biblioteca NEFIS de Deltares conserva sus <a href="https://github.com/mapsm12/NefisReader/blob/main/AVISOS.md">avisos y licencia propios</a>.</p></div>
+      <div><p class="eyebrow">CREDITS AND SCOPE</p><h2>Open-source software.</h2></div>
+      <div><p><strong>NefisReader</strong> is an independent project. It is not an official Deltares product or endorsed by Deltares.</p>
+        <p>Deltares develops the NEFIS library. Its <a href="https://github.com/mapsm12/NefisReader/blob/main/native/README.md">source code, notices and build instructions</a> are distributed separately in the repository. Examples are synthetic and contain no thesis data.</p>
+        <p>The project's own code uses the <a href="https://github.com/mapsm12/NefisReader/blob/main/LICENSE">MIT licence</a>. The Deltares NEFIS library retains its <a href="https://github.com/mapsm12/NefisReader/blob/main/AVISOS.md">own notices and licence</a>.</p></div>
     </section>
     <section id="apoyar" class="setup">
       <div class="shell section credits">
-        <div><h2>¿Te sirvió NefisReader?</h2></div>
-        <div><p>Si quieres apoyar el proyecto con una donación voluntaria, <a class="textlink" href="https://github.com/mapsm12/NefisReader/issues/new?title=Consulta%20sobre%20donaciones%20a%20NefisReader">¡contáctame!</a></p>
-          <p class="fine">El enlace abre una consulta pública en GitHub. No compartas datos de pago.</p></div>
+        <div><h2>Was NefisReader useful?</h2></div>
+        <div><p><a class="button star" href="https://github.com/mapsm12/NefisReader"><span aria-hidden="true">★</span> Star on GitHub</a></p>
+          <p>Sign in on GitHub and click <strong>Star</strong> to bookmark the repository and support the project.</p>
+          <p>If you'd like to support the project with a voluntary donation, <a class="textlink" href="https://github.com/mapsm12/NefisReader/issues/new?title=NefisReader%20donation%20inquiry">get in touch!</a></p>
+          <p class="fine">This opens a public GitHub issue. Do not share payment details there.</p></div>
       </div>
     </section>
   </main>
-  <footer class="top"><div class="shell nav"><span>NefisReader · v0.1</span><a href="https://github.com/mapsm12/NefisReader/issues">Reportar un problema</a></div></footer>
+  <footer class="top"><div class="shell nav"><span>NefisReader · v0.1</span><a href="https://github.com/mapsm12/NefisReader/issues">Report an issue</a></div></footer>
 </body>
 </html>

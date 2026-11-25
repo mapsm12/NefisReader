@@ -33,19 +33,30 @@ def read_fields(path, record):
     return fields
 
 
-def draw(fields, destination, synthetic):
+def draw(fields, destination, synthetic, language="es"):
     x, y = fields["XP"] / 1000, fields["YP"] / 1000
     depth, hs = fields["DEPTH"], fields["HSIGN"]
     u, v = fields["TRANSP_X"] / 1000, fields["TRANSP_Y"] / 1000
     wet = np.isfinite(depth) & (depth > 0)
     if not wet.any():
         raise ValueError("No hay celdas húmedas con DEPTH > 0.")
-    data = [
+    spanish = [
         ("batimetria_vectores.png", "Batimetría y transporte de energía", depth, "Profundidad (m)", "Blues", True),
         ("altura_isobatas.png", "Altura significativa e isóbatas", hs, "Altura significativa (m)", "viridis", False),
     ]
+    english = [
+        ("bathymetry_vectors.png", "Bathymetry and energy transport", depth, "Depth (m)", "Blues", True),
+        ("height_depth_contours.png", "Wave height and depth contours", hs, "Significant wave height (m)", "viridis", False),
+    ]
+    texts = {
+        "es": ("BAHÍA SINTÉTICA · EJEMPLO DE POSPROCESO", "SALIDA NEFIS · EJEMPLO DE POSPROCESO",
+               "Gris: tierra (DEPTH ≤ 0).", "Gris: celdas excluidas por DEPTH ≤ 0 o no finito."),
+        "en": ("SYNTHETIC BAY · POST-PROCESSING EXAMPLE", "NEFIS OUTPUT · POST-PROCESSING EXAMPLE",
+               "Grey: land (DEPTH ≤ 0).", "Grey: cells excluded for DEPTH ≤ 0 or non-finite DEPTH."),
+    }
+    sub_synthetic, sub_real, foot_synthetic, foot_real = texts[language]
     ink = "#142f40"
-    for filename, title, values, unit, palette, arrows in data:
+    for filename, title, values, unit, palette, arrows in spanish if language == "es" else english:
         fig, ax = plt.subplots(figsize=(7.5, 5.9), dpi=160)
         fig.subplots_adjust(left=0.12, right=0.84, bottom=0.17, top=0.86)
         fig.set_facecolor("#ffffff")
@@ -97,9 +108,8 @@ def draw(fields, destination, synthetic):
         for spine in ax.spines.values():
             spine.set_color("#89a6b4")
         fig.text(0.12, 0.94, title, fontsize=18, fontweight="bold", color=ink)
-        fig.text(0.12, 0.895, "BAHÍA SINTÉTICA · EJEMPLO DE POSPROCESO" if synthetic else
-                 "SALIDA NEFIS · EJEMPLO DE POSPROCESO", fontsize=9, color="#365f71")
-        foot = "Gris: tierra (DEPTH ≤ 0)." if synthetic else "Gris: celdas excluidas por DEPTH ≤ 0 o no finito."
+        fig.text(0.12, 0.895, sub_synthetic if synthetic else sub_real, fontsize=9, color="#365f71")
+        foot = foot_synthetic if synthetic else foot_real
         fig.text(0.12, 0.043, foot, fontsize=8.5, color="#365f71")
         fig.savefig(destination / filename, pil_kwargs={"optimize": True})
         plt.close(fig)
@@ -111,10 +121,11 @@ def main():
     parser.add_argument("--outdir", type=Path, required=True)
     parser.add_argument("--record", type=int, default=0)
     parser.add_argument("--synthetic", action="store_true", help="Marca los mapas como bahía sintética.")
+    parser.add_argument("--lang", choices=("es", "en"), default="es", help="Idioma de las etiquetas y los títulos.")
     args = parser.parse_args()
     fields = read_fields(args.netcdf, args.record)
     args.outdir.mkdir(parents=True, exist_ok=True)
-    draw(fields, args.outdir, args.synthetic)
+    draw(fields, args.outdir, args.synthetic, args.lang)
 
 
 if __name__ == "__main__":

@@ -88,8 +88,12 @@ La salida de las herramientas puede llegar al proveedor del cliente MCP.
 ## Actualizar la web y publicar cambios
 
 1. Revisa el estado remoto y las modificaciones antes de editar. Los
-   metadatos Python están en `pyproject.toml`, la portada en
-   `docs/index.html` y el acceso principal en `index.html`.
+   metadatos Python están en `pyproject.toml`; la plantilla española
+   de la web está en `docs/es.html`. Tras modificarla, sincroniza
+   `scripts/localizar_web.py` y ejecuta `python3 scripts/localizar_web.py docs`
+   para regenerar inglés (idioma inicial), indonesio y chino simplificado.
+   Los textos dinámicos se mantienen en `docs/i18n.js`. El acceso
+   principal sigue en el `index.html` de la raíz.
 2. GitHub Pages usa la rama `main` desde la raíz. El `index.html` de la
    raíz lleva a `/docs/`. La copia anterior de Sites quedó privada; no
    la uses como publicación. No hace falta iniciar sesión allí.

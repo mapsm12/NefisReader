@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Baca keluaran NEFIS Delft3D 4 dan konversikan ke NetCDF dengan Python. Coba contoh WAVE 2D dan FLOW 3D.">
+  <meta name="theme-color" content="#081e2c">
+  <title>NefisReader v0.1 — Paket Python untuk Delft3D 4</title>
+  <link rel="alternate" hreflang="en" href="index.html">
+  <link rel="alternate" hreflang="es" href="es.html">
+  <link rel="alternate" hreflang="id" href="id.html">
+  <link rel="alternate" hreflang="zh-Hans" href="zh.html">
+  <link rel="alternate" hreflang="x-default" href="index.html">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="i18n.js"></script>
+  <script defer src="demo-data.js"></script>
+  <script defer src="demo.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Lewati ke konten</a>
+  <header class="top">
+    <div class="shell nav">
+      <a class="brand" href="#" aria-label="Beranda NefisReader"><span aria-hidden="true" class="mark">≋</span>NefisReader</a>
+      <nav aria-label="Navigasi utama">
+        <a href="#demo">Contoh</a><a href="#instalar">Instalasi</a>
+        <a href="https://github.com/mapsm12/NefisReader">GitHub</a>
+      </nav>
+      <nav class="languages" aria-label="Bahasa">
+        <a href="index.html" data-lang="en" lang="en" hreflang="en">English</a>
+        <a href="es.html" data-lang="es" lang="es" hreflang="es">Español</a>
+        <a href="id.html" data-lang="id" lang="id" hreflang="id" aria-current="page">Bahasa Indonesia</a>
+        <a href="zh.html" data-lang="zh-Hans" lang="zh-Hans" hreflang="zh-Hans">简体中文</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <section class="hero">
+      <div class="shell intro">
+        <div>
+          <p class="eyebrow">PAKET PYTHON SUMBER TERBUKA · V0.1</p>
+          <h1>NefisReader</h1>
+          <p class="lead">Baca keluaran NEFIS Delft3D 4 dan konversikan ke <strong>NetCDF</strong>. Tersedia perintah <code>d3dnefis</code>, API Python, dan server MCP opsional.</p>
+          <div class="actions"><a class="button primary" href="#instalar">Instal di Linux</a><a class="button outline" href="#demo">Jelajahi contoh 2D dan 3D</a></div>
+        </div>
+        <div class="schematic" aria-label="Alur kerja: dari NEFIS ke Python dan NetCDF">
+          <svg viewBox="0 0 420 238" role="img" aria-labelledby="sketch">
+            <title id="sketch">Skema konseptual medan pada kisi tiga lapis</title>
+            <defs>
+              <pattern id="grid" width="26" height="18" patternUnits="userSpaceOnUse"><path d="M 26 0 L 0 0 0 18" stroke="#7ee0d4" stroke-opacity=".35" fill="none"/></pattern>
+              <linearGradient id="plane"><stop stop-color="#26b7a7" stop-opacity=".7"/><stop offset="1" stop-color="#136785" stop-opacity=".15"/></linearGradient>
+            </defs>
+            <g transform="translate(48 53) skewX(-28)">
+              <g fill="url(#grid)" stroke="#5097a1" stroke-width="1">
+                <rect x="85" y="76" width="260" height="96"/>
+                <rect x="54" y="38" width="260" height="96"/>
+                <rect x="24" y="0" width="260" height="96"/>
+              </g>
+              <rect x="24" y="0" width="260" height="96" fill="url(#plane)" opacity=".55"/>
+              <g fill="none" stroke="#b6fff1" stroke-width="1.5" opacity=".8">
+                <path d="M31 65 Q106 66 147 36 T272 24"/>
+                <path d="M31 77 Q112 78 155 48 T277 35"/>
+                <path d="M31 87 Q112 89 164 60 T280 45"/>
+              </g>
+            </g>
+          </svg>
+          <div class="diagram-labels"><span>.dat + .def</span><span>Python</span><span>.nc</span></div>
+        </div>
+      </div>
+    </section>
+    <section id="demo" class="shell section">
+      <div class="section-head"><p class="eyebrow">CONTOH INTERAKTIF</p><h2>Jelajahi WAVE 2D dan FLOW 3D.</h2>
+        <p>Pilih medan gelombang atau lapisan kecepatan. Nilai ini diekspor dengan NefisReader dari contoh sintetis di repositori.</p></div>
+      <div class="workbench">
+        <div class="controls">
+          <label>Contoh<select id="case"><option value="wave">WAVE · gelombang 2D</option><option value="flow">FLOW · kecepatan 3D</option></select></label>
+          <label>Variabel<select id="variable"><option>HSIGN</option></select></label>
+          <label>Rekaman<select id="record"><option value="0">0</option></select></label>
+          <label id="layer-control" hidden>Lapisan<select id="layer"><option value="0">0</option></select></label>
+          <a class="textlink" href="https://github.com/mapsm12/NefisReader/tree/main/examples/data">Berkas .dat dan .def</a>
+        </div>
+        <div class="result">
+          <div class="result-head"><div><h3 id="variable-title">Tinggi gelombang signifikan</h3><p id="shape">Memuat contoh…</p></div><button id="csv" class="small" type="button" disabled>Unduh CSV</button></div>
+          <div class="matrix-wrap">
+            <table class="matrix" id="matrix" aria-label="Nilai contoh pada satu bidang"></table>
+          </div>
+          <div class="scale"><span id="min"></span><span class="ramp" aria-hidden="true"></span><span id="max"></span></div>
+          <p id="status" class="muted" role="status">Data sintetis, bukan pengamatan atau hasil tesis.</p>
+          <noscript><p>Aktifkan JavaScript atau unduh pasangan berkas untuk mencobanya di Python.</p></noscript>
+        </div>
+      </div>
+      <p class="fine">Penjelajah menampilkan irisan yang sudah dihitung. Paket yang terpasang membaca dan mengonversi pasangan <code>.dat/.def</code> milik Anda. Halaman ini tidak menerima unggahan.</p>
+      <p><a class="textlink" href="#mapas">Lihat peta dari NetCDF hasil ekspor</a></p>
+    </section>
+    <section id="mapas" class="shell section map-section">
+      <div class="section-head"><p class="eyebrow">CONTOH PASCAPROSES</p><h2>Dari NetCDF ke peta.</h2>
+        <p>NefisReader mengekspor medan, lalu skrip Python menggabungkannya menjadi peta. Kedua contoh memakai teluk sintetis yang sama, bukan hasil simulasi atau data Callao. Label gambar berbahasa Inggris.</p></div>
+      <div class="map-gallery">
+        <figure>
+          <a href="figures/bathymetry_vectors.png" aria-label="Buka peta batimetri dan vektor ukuran penuh">
+            <img src="figures/bathymetry_vectors.png" width="1200" height="944" loading="lazy" decoding="async" alt="Peta kedalaman sintetis: biru lebih gelap menunjukkan air lebih dalam; panah emas menandai transpor energi di sekitar pulau.">
+          </a>
+          <figcaption><h3>Batimetri dan fluks energi</h3>
+            <p>Latar: <code>DEPTH</code> dalam meter. Panah: <code>TRANSP_X</code> dan <code>TRANSP_Y</code> dalam kW/m, hanya di atas air.</p>
+            <a href="figures/bathymetry_vectors.png" download>Unduh PNG</a>
+          </figcaption>
+        </figure>
+        <figure>
+          <a href="figures/height_depth_contours.png" aria-label="Buka peta tinggi gelombang dan kontur kedalaman ukuran penuh">
+            <img src="figures/height_depth_contours.png" width="1200" height="944" loading="lazy" decoding="async" alt="Peta tinggi gelombang signifikan sintetis dengan kontur kedalaman 10, 20, dan 40 meter serta gelombang lebih rendah di belakang pulau.">
+          </a>
+          <figcaption><h3>Tinggi gelombang signifikan dan kontur kedalaman</h3>
+            <p>Warna: <code>HSIGN</code> dalam meter. Garis: kontur kedalaman. Abu-abu menandai daratan pada contoh sintetis.</p>
+            <a href="figures/height_depth_contours.png" download>Unduh PNG</a>
+          </figcaption>
+        </figure>
+      </div>
+      <p class="map-source"><a class="textlink" href="https://github.com/mapsm12/NefisReader/blob/main/README.en.md#reproduce-the-maps">Reproduksi kedua peta dengan Python</a></p>
+    </section>
+    <section id="instalar" class="setup">
+      <div class="shell section">
+        <div class="section-head"><p class="eyebrow">INSTALASI</p><h2>Instal paket dan baca keluaran model Anda.</h2>
+          <p>Linux x86-64, Python 3.9+, dan akses internet untuk menginstal dependensi. <a href="https://github.com/mapsm12/NefisReader/archive/refs/heads/main.tar.gz">Unduh paket</a> dan jalankan perintah berikut dari folder unduhan. Anda tidak perlu memasang Delft3D.</p></div>
+        <div class="setup-grid">
+          <div class="terminal"><div class="terminal-top"><span>Terminal · Linux</span><button data-copy="install-command" class="small" type="button">Salin</button></div>
+<pre id="install-command"><code>tar -xzf NefisReader-main.tar.gz
+cd NefisReader-main
+python3 -m venv .venv
+source .venv/bin/activate
+bash scripts/install.sh
+d3dnefis examples/data
+python examples/leer_mallas.py \
+  examples/data/NETCDF_EXPORT/wavm-demo-2d.nc \
+  examples/data/NETCDF_EXPORT/trim-demo-3d.nc</code></pre>
+          </div>
+          <div class="side">
+            <h3>Sudah memiliki berkas?</h3><p>Berikan berkas <code>.dat</code> atau folder keluaran kepada <code>d3dnefis</code>. Gunakan <code>--inventory</code> untuk melihat daftar variabel tanpa konversi.</p>
+            <h3>Hubungkan agen Anda melalui MCP</h3><p>Server lokal menampilkan daftar variabel dan membaca irisan NEFIS atau NetCDF dalam folder yang diizinkan. Memerlukan Python 3.10+.</p>
+            <a class="textlink" href="https://github.com/mapsm12/NefisReader/blob/main/README.en.md#mcp">Panduan MCP untuk Codex dan klien lain</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="creditos" class="shell section credits">
+      <div><p class="eyebrow">KREDIT DAN CAKUPAN</p><h2>Perangkat lunak sumber terbuka.</h2></div>
+      <div><p><strong>NefisReader</strong> adalah proyek independen. Ini bukan produk resmi dan tidak mewakili dukungan Deltares.</p>
+        <p>Deltares mengembangkan pustaka NEFIS. Arsip <a href="https://github.com/mapsm12/NefisReader/blob/main/native/README.md">kode sumber, pemberitahuan, dan petunjuk kompilasi</a> didistribusikan terpisah di dalam repositori. Contoh bersifat sintetis dan tidak memuat data tesis.</p>
+        <p>Kode proyek ini menggunakan <a href="https://github.com/mapsm12/NefisReader/blob/main/LICENSE">lisensi MIT</a>. Pustaka NEFIS dari Deltares tetap mengikuti <a href="https://github.com/mapsm12/NefisReader/blob/main/AVISOS.md">pemberitahuan dan lisensinya sendiri</a>.</p></div>
+    </section>
+    <section id="apoyar" class="setup">
+      <div class="shell section credits">
+        <div><h2>Apakah NefisReader bermanfaat?</h2></div>
+        <div><p><a class="button star" href="https://github.com/mapsm12/NefisReader"><span aria-hidden="true">★</span> Beri bintang di GitHub</a></p>
+          <p>Masuk ke GitHub lalu klik <strong>Star</strong> untuk menandai repositori dan mendukung proyek ini.</p>
+          <p>Jika ingin mendukung proyek dengan donasi sukarela, <a class="textlink" href="https://github.com/mapsm12/NefisReader/issues/new?title=NefisReader%20donation%20inquiry">hubungi saya!</a></p>
+          <p class="fine">Tautan membuka isu publik di GitHub. Jangan bagikan informasi pembayaran di sana.</p></div>
+      </div>
+    </section>
+  </main>
+  <footer class="top"><div class="shell nav"><span>NefisReader · v0.1</span><a href="https://github.com/mapsm12/NefisReader/issues">Laporkan masalah</a></div></footer>
+</body>
+</html>

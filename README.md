@@ -1,5 +1,9 @@
 # NefisReader v0.1 — Delft3D 4 NEFIS a NetCDF con Python
 
+[English README](README.en.md) · [Español](https://mapsm12.github.io/NefisReader/docs/es.html) ·
+[Bahasa Indonesia](https://mapsm12.github.io/NefisReader/docs/id.html) ·
+[简体中文](https://mapsm12.github.io/NefisReader/docs/zh.html)
+
 Paquete instalable de software libre que incluye el conversor `d3dnefis`.
 Lee parejas NEFIS `.dat` + `.def`
 mediante la API C de la biblioteca NEFIS con Python y `ctypes`, y exporta
@@ -147,6 +151,9 @@ La licencia de la [biblioteca de Deltares](native/README.md) y la de tus
 datos se gestionan por separado.
 
 ## Apoyar el proyecto
+
+Si te sirvió, puedes **darle una estrella al repositorio** con el botón
+**Star** en GitHub.
 
 ¿Te sirvió NefisReader? Si quieres apoyar el proyecto con una donación
 voluntaria, [¡contáctame!](https://github.com/mapsm12/NefisReader/issues/new?title=Consulta%20sobre%20donaciones%20a%20NefisReader)

@@ -3,11 +3,10 @@
 const byId = (id) => document.getElementById(id);
 const controls = ["case", "variable", "record", "layer"].map(byId);
 const [caseSelect, variableSelect, recordSelect, layerSelect] = controls;
-const names = {
-  HSIGN: "Altura significativa", RTP: "Período pico", DIR: "Dirección de oleaje",
-  XP: "Coordenada X", YP: "Coordenada Y", U1: "Velocidad U1", V1: "Velocidad V1",
-};
-const fmt = new Intl.NumberFormat("es", { maximumFractionDigits: 3 });
+const language = document.documentElement.lang;
+const copy = NEFIS_TEXT[language] || NEFIS_TEXT.en;
+const names = copy.names;
+const fmt = new Intl.NumberFormat(language, { maximumFractionDigits: 3 });
 let plane = [];
 
 function options(select, values, label = (value) => value) {
@@ -32,11 +31,11 @@ function render() {
   plane = depth ? values[recordSelect.value][layerSelect.value] : values[recordSelect.value];
   const flat = plane.flat(), lo = Math.min(...flat), hi = Math.max(...flat);
   byId("variable-title").textContent = names[name];
-  byId("shape").textContent = name + " · " + units + " · matriz cruda (" + shape.join(" × ") + ")";
+  byId("shape").textContent = name + " · " + units + " · " + copy.shape + " (" + shape.join(" × ") + ")";
   byId("min").textContent = fmt.format(lo) + " " + units;
   byId("max").textContent = fmt.format(hi) + " " + units;
-  byId("status").textContent = "Registro " + recordSelect.value +
-    (depth ? ", capa " + layerSelect.value : "") + ". Escala del plano mostrado; datos sintéticos.";
+  byId("status").textContent = copy.record + " " + recordSelect.value +
+    (depth ? ", " + copy.layer + " " + layerSelect.value : "") + ". " + copy.scale;
   const table = byId("matrix");
   table.replaceChildren();
   const header = table.createTHead().insertRow();
@@ -46,7 +45,7 @@ function render() {
     cell.textContent = label;
     row.append(cell);
   };
-  th(header, "Fila", "col");
+  th(header, copy.row, "col");
   plane[0].forEach((_, i) => th(header, "C" + i, "col"));
   const body = table.createTBody();
   plane.forEach((line, j) => {
@@ -83,20 +82,20 @@ if (typeof NEFIS_DEMO !== "undefined") {
   byId("csv").addEventListener("click", download);
   setupCase();
 } else {
-  byId("status").textContent = "No se cargaron los ejemplos. Puedes descargarlos desde GitHub.";
+  byId("status").textContent = copy.unavailable;
 }
 
 document.querySelectorAll("[data-copy]").forEach((button) => button.addEventListener("click", async () => {
   const target = byId(button.dataset.copy);
   try {
     await navigator.clipboard.writeText(target.textContent.trim());
-    button.textContent = "Copiado";
+    button.textContent = copy.copied;
   } catch {
     const range = document.createRange();
     range.selectNodeContents(target);
     const selection = window.getSelection();
     selection.removeAllRanges();
     selection.addRange(range);
-    button.textContent = "Texto seleccionado";
+    button.textContent = copy.selected;
   }
 }));
